@@ -16,6 +16,12 @@ import 'package:uangku/features/gaji/domain/usecases/delete_gaji.dart';
 import 'package:uangku/features/gaji/domain/usecases/update_gaji.dart';
 import 'package:uangku/features/gaji/domain/usecases/watch_all_gaji.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_bloc.dart';
+import 'package:uangku/features/pengeluaran/data/datasources/kategori_local_datasource.dart';
+import 'package:uangku/features/pengeluaran/data/repositories/kategori_repository_impl.dart';
+import 'package:uangku/features/pengeluaran/domain/repositories/kategori_repository.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/add_kategori.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/delete_kategori.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/watch_kategori_pengeluaran.dart';
 
 final sl = GetIt.instance;
 
@@ -62,4 +68,17 @@ Future<void> initDependencies() async {
       deleteGaji: sl(),
     ),
   );
+
+  sl.registerLazySingleton(() => KategoriLocalDataSource(sl()));
+
+  sl.registerLazySingleton<KategoriRepository>(
+    () => KategoriRepositoryImpl(sl()),
+  );
+
+  sl.registerLazySingleton(() => WatchKategoriPengeluaran(sl()));
+  sl.registerLazySingleton(() => AddKategori(sl()));
+  sl.registerLazySingleton(() => DeleteKategori(sl()));
+
+  // Seed kategori default (jalan sekali kalau tabel masih kosong).
+  await sl<KategoriLocalDataSource>().seedDefaultsIfEmpty();
 }
