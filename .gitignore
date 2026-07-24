@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase config (client keys — provide your own when cloning)
+android/app/google-services.json
+firebase.json
+lib/firebase_options.dart
