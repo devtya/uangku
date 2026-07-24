@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "21131452672",
+    "project_id": "uangku-ab076",
+    "storage_bucket": "uangku-ab076.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21131452672:android:a5630349217e50b6cc93e5",
+        "android_client_info": {
+          "package_name": "com.devtya.uangku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21131452672-27mtpbealp4ua4v95hb62hvfoocfhloq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyPwjC4IP3DnKFZ_EsjrATQ3oPXRt2UTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21131452672-27mtpbealp4ua4v95hb62hvfoocfhloq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
