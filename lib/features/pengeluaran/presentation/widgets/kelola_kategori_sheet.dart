@@ -34,6 +34,11 @@ class _KelolaKategoriSheet extends StatelessWidget {
           children: [
             Row(
               children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, size: 20),
+                  tooltip: 'Kembali',
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
                 const Expanded(
                   child: Text('Kelola Kategori',
                       style:
