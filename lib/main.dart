@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:uangku/core/di/injection.dart';
+import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
@@ -42,13 +43,20 @@ class UangkuApp extends StatelessWidget {
         BlocProvider<UtangBloc>(
           create: (_) => sl<UtangBloc>(),
         ),
+        BlocProvider<ThemeCubit>(
+          create: (_) => sl<ThemeCubit>(),
+        ),
       ],
-      child: MaterialApp(
-        title: 'Uangku',
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.system,
-        home: const AuthGate(),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp(
+            title: 'Uangku',
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeMode,
+            home: const AuthGate(),
+          );
+        },
       ),
     );
   }

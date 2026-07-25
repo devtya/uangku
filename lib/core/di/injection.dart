@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uangku/core/database/app_database.dart';
+import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:uangku/features/auth/data/repositories/auth_repository_impl.dart';
@@ -55,6 +56,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton(() => SyncService(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => ThemeCubit(sl()));
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(firebaseAuth: sl(), googleSignIn: sl()),
@@ -156,4 +158,7 @@ Future<void> initDependencies() async {
   // ...lalu pastikan kategori sistem 'Cicilan/Utang' selalu ada (idempotent),
   // termasuk untuk instalasi lama yang tabelnya sudah terisi.
   await sl<KategoriLocalDataSource>().ensureKategori(kKategoriCicilanUtang);
+
+  // Muat preferensi tema tersimpan sebelum app dibangun.
+  await sl<ThemeCubit>().load();
 }

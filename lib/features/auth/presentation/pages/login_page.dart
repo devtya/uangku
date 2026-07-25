@@ -151,19 +151,20 @@ class _GoogleButton extends StatelessWidget {
           height: 52,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: context.colors.border),
+            border: Border.all(color: const Color(0xFFD8DFE6)),
           ),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _GoogleGlyph(),
               SizedBox(width: 10),
+              // Tombol selalu putih (branding Google) → teks gelap tetap.
               Text(
                 'Masuk dengan Google',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: context.colors.textPrimary,
+                  color: Color(0xFF141B24),
                 ),
               ),
             ],
@@ -182,17 +183,17 @@ class _GoogleGlyph extends StatelessWidget {
     return Container(
       width: 20,
       height: 20,
-      decoration: BoxDecoration(
-        color: context.colors.tint,
+      decoration: const BoxDecoration(
+        color: Color(0xFFE0EDFC),
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
-      child: Text(
+      child: const Text(
         'G',
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: context.colors.accent,
+          color: Color(0xFF11458C),
         ),
       ),
     );
