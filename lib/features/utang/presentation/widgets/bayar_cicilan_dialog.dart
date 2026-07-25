@@ -78,6 +78,9 @@ class _BayarCicilanDialogState extends State<BayarCicilanDialog> {
                 if (parsed == null || parsed <= 0) {
                   return 'Jumlah harus lebih dari 0';
                 }
+                if (parsed > sisa) {
+                  return 'Melebihi sisa utang (${rp.format(sisa)})';
+                }
                 return null;
               },
             ),

@@ -42,6 +42,13 @@ class BayarCicilanUtang {
       // diturunkan otomatis di UtangModel saat update).
       final terbayarBaru =
           (utang.jumlahTerbayar + jumlahBayar).clamp(0.0, utang.jumlahTotal);
+      // Jumlah yang benar-benar terpakai — bisa < jumlahBayar kalau input
+      // melebihi sisa. Pengeluaran dicatat sebesar ini agar konsisten dengan
+      // pengurangan utang (bukan input mentah).
+      final actualBayar = terbayarBaru - utang.jumlahTerbayar;
+      if (actualBayar <= 0) {
+        return const Left(Failure('Utang sudah lunas'));
+      }
 
       // Langkah 1: update utang.
       final resUtang = await _utangRepository.updateUtang(
@@ -54,7 +61,7 @@ class BayarCicilanUtang {
       final resPengeluaran = await _pengeluaranRepository.addPengeluaran(
         PengeluaranEntity(
           id: const Uuid().v4(),
-          jumlah: jumlahBayar,
+          jumlah: actualBayar,
           kategoriId: kategoriId,
           tanggal: tanggal,
           catatan: 'Cicilan: ${utang.namaUtang}',
