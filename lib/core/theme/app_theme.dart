@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Design tokens for uangku — white & blue palette.
 /// Source of truth: "uangku UI.dc.html" (oklch values converted to sRGB).
@@ -45,29 +46,33 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: AppColors.background,
-      fontFamily: null,
-      textTheme: const TextTheme(
-        headlineSmall: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
-        ),
-        titleLarge: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
-        ),
-        titleMedium: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
-        ),
-        bodyMedium: TextStyle(color: AppColors.textSecondary),
-        titleSmall: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          color: AppColors.textSecondary,
+      // Poppins diterapkan ke seluruh teks lewat textTheme; TextStyle eksplisit
+      // tanpa fontFamily mewarisi ini via merge dengan DefaultTextStyle.
+      fontFamily: GoogleFonts.poppins().fontFamily,
+      textTheme: GoogleFonts.poppinsTextTheme(
+        const TextTheme(
+          headlineSmall: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+          titleLarge: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+          titleMedium: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+          bodyMedium: TextStyle(color: AppColors.textSecondary),
+          titleSmall: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 12,
+            color: AppColors.textSecondary,
+          ),
         ),
       ),
       appBarTheme: const AppBarTheme(
