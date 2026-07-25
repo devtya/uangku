@@ -21,9 +21,16 @@ class UpdateService {
   Future<UpdateInfo?> checkForUpdate() async {
     final res = await http.get(
       Uri.parse('https://api.github.com/repos/$_repo/releases/latest'),
-      headers: const {'Accept': 'application/vnd.github+json'},
+      headers: const {
+        'Accept': 'application/vnd.github+json',
+        // GitHub API WAJIB User-Agent; tanpa ini dibalas 403.
+        'User-Agent': 'uangku-app',
+      },
     );
-    if (res.statusCode != 200) return null; // 404 = belum ada rilis
+    if (res.statusCode == 404) return null; // belum ada rilis
+    if (res.statusCode != 200) {
+      throw Exception('GitHub API ${res.statusCode}');
+    }
     final data = jsonDecode(res.body) as Map<String, dynamic>;
 
     final latest = _normalize(data['tag_name'] as String? ?? '');
