@@ -81,6 +81,20 @@ Future<UtangDetailAction?> showUtangDetailDialog(
                   ),
                 ),
               ),
+              if (utang.isCicilan) ...[
+                const SizedBox(height: 12),
+                _DetailRow('Tenor', '${utang.tenor} bulan'),
+                _DetailRow('Bunga', '${_fmtNum(utang.bungaPersen!)}% /bln'),
+                _DetailRow('Cicilan/bulan', rp.format(utang.cicilanPerBulan)),
+                const SizedBox(height: 12),
+                Text('Jadwal Cicilan',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: context.colors.textPrimary)),
+                const SizedBox(height: 6),
+                ...utang.jadwalCicilan.map((c) => _JadwalRow(cicilan: c, rp: rp)),
+              ],
               const SizedBox(height: 16),
               Text(
                 'Riwayat Pembayaran',
@@ -117,6 +131,43 @@ Future<UtangDetailAction?> showUtangDetailDialog(
       ],
     ),
   );
+}
+
+String _fmtNum(double v) =>
+    v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
+
+class _JadwalRow extends StatelessWidget {
+  final CicilanJadwal cicilan;
+  final NumberFormat rp;
+  const _JadwalRow({required this.cicilan, required this.rp});
+
+  @override
+  Widget build(BuildContext context) {
+    final df = DateFormat('d MMM yyyy', 'id_ID');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Icon(cicilan.lunas ? Icons.check_circle : Icons.circle_outlined,
+              size: 16,
+              color: cicilan.lunas
+                  ? Colors.green.shade600
+                  : context.colors.textMuted),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text('Cicilan ${cicilan.nomor} · ${df.format(cicilan.jatuhTempo)}',
+                style: TextStyle(fontSize: 12, color: context.colors.textSecondary)),
+          ),
+          Text(rp.format(cicilan.nominal),
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: context.colors.textPrimary,
+                  fontFeatures: const [FontFeature.tabularFigures()])),
+        ],
+      ),
+    );
+  }
 }
 
 class _RiwayatCicilan extends StatelessWidget {

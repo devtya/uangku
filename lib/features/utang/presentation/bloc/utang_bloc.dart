@@ -64,6 +64,10 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
       status: UtangStatus.belumLunas,
       jatuhTempo: event.jatuhTempo,
       catatan: event.catatan,
+      jenis: event.jenis,
+      tenor: event.tenor,
+      bungaPersen: event.bungaPersen,
+      tanggalMulai: event.tanggalMulai,
     );
     final result = await _addUtang(utang);
     result.fold(

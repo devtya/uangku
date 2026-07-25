@@ -58,9 +58,11 @@ class BerandaPage extends StatelessWidget {
     final tren = _trenPengeluaran(pengeluaranList, now);
 
     final dueDebts = utangList
-        .where((u) => u.status == UtangStatus.belumLunas && u.jatuhTempo != null)
+        .where((u) =>
+            u.status == UtangStatus.belumLunas && u.jatuhTempoBerikutnya != null)
         .toList()
-      ..sort((a, b) => a.jatuhTempo!.compareTo(b.jatuhTempo!));
+      ..sort((a, b) =>
+          a.jatuhTempoBerikutnya!.compareTo(b.jatuhTempoBerikutnya!));
 
     return SafeArea(
       bottom: false,
@@ -361,8 +363,8 @@ class _DueDebts extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (_, i) {
           final u = utang[i];
-          final due = DateTime(
-              u.jatuhTempo!.year, u.jatuhTempo!.month, u.jatuhTempo!.day);
+          final jt = u.jatuhTempoBerikutnya!;
+          final due = DateTime(jt.year, jt.month, jt.day);
           final d = due.difference(today).inDays;
           final badge = d < 0 ? 'Telat' : (d == 0 ? 'Hari ini' : 'H-$d');
           return _DebtCard(
@@ -370,7 +372,7 @@ class _DueDebts extends StatelessWidget {
             badge: badge,
             sisa: u.sisaUtang,
             progress: u.progressPercent,
-            jatuhTempo: dateFormat.format(u.jatuhTempo!),
+            jatuhTempo: dateFormat.format(jt),
             overdue: d < 0,
           );
         },

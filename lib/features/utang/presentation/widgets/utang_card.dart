@@ -92,7 +92,7 @@ class UtangCard extends StatelessWidget {
                   ),
               ],
             ),
-            if (utang.jatuhTempo != null) ...[
+            if (utang.jatuhTempoBerikutnya != null) ...[
               const SizedBox(height: 6),
               _jatuhTempoRow(context, lunas),
             ],
@@ -123,7 +123,7 @@ class UtangCard extends StatelessWidget {
   }
 
   Widget _jatuhTempoRow(BuildContext context, bool lunas) {
-    final due = utang.jatuhTempo!;
+    final due = utang.jatuhTempoBerikutnya!;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final dueDay = DateTime(due.year, due.month, due.day);

@@ -29,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -45,6 +45,13 @@ class AppDatabase extends _$AppDatabase {
           // v4: metadata sync (lastUid untuk deteksi ganti akun).
           if (from < 4) {
             await m.createTable(syncMetaTable);
+          }
+          // v5: jenis utang (bulat/cicilan) + parameter cicilan.
+          if (from < 5) {
+            await m.addColumn(utangTable, utangTable.jenis);
+            await m.addColumn(utangTable, utangTable.tenor);
+            await m.addColumn(utangTable, utangTable.bungaPersen);
+            await m.addColumn(utangTable, utangTable.tanggalMulai);
           }
         },
       );

@@ -8,6 +8,12 @@ class UtangTable extends Table {
   TextColumn get status => text()();
   DateTimeColumn? get jatuhTempo => dateTime().nullable()();
   TextColumn? get catatan => text().nullable()();
+  // Jenis: 'bulat' (bayar bebas) atau 'cicilan'. Null = bulat (baris lama).
+  TextColumn? get jenis => text().nullable()();
+  // Khusus cicilan:
+  IntColumn? get tenor => integer().nullable()();
+  RealColumn? get bungaPersen => real().nullable()();
+  DateTimeColumn? get tanggalMulai => dateTime().nullable()();
   DateTimeColumn get updatedAt => dateTime()();
   BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
   BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();

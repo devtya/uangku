@@ -21,7 +21,11 @@ class _BayarCicilanDialogState extends State<BayarCicilanDialog> {
   void initState() {
     super.initState();
     // Default: sisa utang (bayar lunas sekaligus), tetap bisa diubah.
-    _jumlahText = formatRupiahDigits(widget.utang.sisaUtang.toStringAsFixed(0));
+    // Default: 1 cicilan untuk utang cicilan; sisa penuh untuk utang bulat.
+    final def = widget.utang.isCicilan
+        ? widget.utang.cicilanPerBulan.clamp(0.0, widget.utang.sisaUtang)
+        : widget.utang.sisaUtang;
+    _jumlahText = formatRupiahDigits(def.round().toString());
     _tanggal = DateTime.now();
   }
 

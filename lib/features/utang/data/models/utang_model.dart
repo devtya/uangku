@@ -11,6 +11,10 @@ class UtangModel {
   final String status;
   final DateTime? jatuhTempo;
   final String? catatan;
+  final String jenis;
+  final int? tenor;
+  final double? bungaPersen;
+  final DateTime? tanggalMulai;
   final DateTime updatedAt;
   final bool isSynced;
   final bool isDeleted;
@@ -23,6 +27,10 @@ class UtangModel {
     required this.status,
     this.jatuhTempo,
     this.catatan,
+    required this.jenis,
+    this.tenor,
+    this.bungaPersen,
+    this.tanggalMulai,
     required this.updatedAt,
     required this.isSynced,
     required this.isDeleted,
@@ -43,6 +51,10 @@ class UtangModel {
       status: deriveStatus(entity.jumlahTerbayar, entity.jumlahTotal),
       jatuhTempo: entity.jatuhTempo,
       catatan: entity.catatan,
+      jenis: entity.jenis,
+      tenor: entity.tenor,
+      bungaPersen: entity.bungaPersen,
+      tanggalMulai: entity.tanggalMulai,
       updatedAt: DateTime.now(),
       isSynced: false,
       isDeleted: false,
@@ -58,6 +70,10 @@ class UtangModel {
       status: status,
       jatuhTempo: jatuhTempo,
       catatan: catatan,
+      jenis: jenis,
+      tenor: tenor,
+      bungaPersen: bungaPersen,
+      tanggalMulai: tanggalMulai,
     );
   }
 
@@ -70,6 +86,11 @@ class UtangModel {
       status: data.status,
       jatuhTempo: data.jatuhTempo,
       catatan: data.catatan,
+      // Baris lama (null) = bulat.
+      jenis: data.jenis ?? UtangJenis.bulat,
+      tenor: data.tenor,
+      bungaPersen: data.bungaPersen,
+      tanggalMulai: data.tanggalMulai,
       updatedAt: data.updatedAt,
       isSynced: data.isSynced,
       isDeleted: data.isDeleted,
@@ -85,6 +106,10 @@ class UtangModel {
       status: Value(status),
       jatuhTempo: Value(jatuhTempo),
       catatan: Value(catatan),
+      jenis: Value(jenis),
+      tenor: Value(tenor),
+      bungaPersen: Value(bungaPersen),
+      tanggalMulai: Value(tanggalMulai),
       updatedAt: Value(updatedAt),
       isSynced: Value(isSynced),
       isDeleted: Value(isDeleted),

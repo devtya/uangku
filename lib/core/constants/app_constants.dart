@@ -9,3 +9,11 @@ class UtangStatus {
 /// Nama kategori pengeluaran khusus untuk pencatatan pembayaran cicilan utang.
 /// Selalu dipastikan ada di KategoriTable saat startup (lihat injection.dart).
 const kKategoriCicilanUtang = 'Cicilan/Utang';
+
+/// Jenis utang.
+class UtangJenis {
+  const UtangJenis._();
+
+  static const bulat = 'bulat'; // bayar bebas, bukan cicilan terjadwal
+  static const cicilan = 'cicilan'; // tenor + bunga, jadwal per bulan
+}

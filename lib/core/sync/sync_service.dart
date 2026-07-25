@@ -235,6 +235,11 @@ class SyncService {
           jatuhTempo:
               Value(d['jatuhTempo'] == null ? null : _ms(d['jatuhTempo'])),
           catatan: Value(d['catatan'] as String?),
+          jenis: Value(d['jenis'] as String? ?? 'bulat'),
+          tenor: Value(d['tenor'] as int?),
+          bungaPersen: Value((d['bungaPersen'] as num?)?.toDouble()),
+          tanggalMulai: Value(
+              d['tanggalMulai'] == null ? null : _ms(d['tanggalMulai'])),
           updatedAt: Value(remote),
           isSynced: const Value(true),
           isDeleted: Value(d['isDeleted'] as bool? ?? false),
@@ -293,6 +298,10 @@ class SyncService {
         'status': r.status,
         'jatuhTempo': r.jatuhTempo?.millisecondsSinceEpoch,
         'catatan': r.catatan,
+        'jenis': r.jenis,
+        'tenor': r.tenor,
+        'bungaPersen': r.bungaPersen,
+        'tanggalMulai': r.tanggalMulai?.millisecondsSinceEpoch,
         'updatedAt': r.updatedAt.millisecondsSinceEpoch,
         'isDeleted': r.isDeleted,
       };

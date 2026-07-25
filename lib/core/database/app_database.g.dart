@@ -1167,6 +1167,46 @@ class $UtangTableTable extends UtangTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _jenisMeta = const VerificationMeta('jenis');
+  @override
+  late final GeneratedColumn<String> jenis = GeneratedColumn<String>(
+    'jenis',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tenorMeta = const VerificationMeta('tenor');
+  @override
+  late final GeneratedColumn<int> tenor = GeneratedColumn<int>(
+    'tenor',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bungaPersenMeta = const VerificationMeta(
+    'bungaPersen',
+  );
+  @override
+  late final GeneratedColumn<double> bungaPersen = GeneratedColumn<double>(
+    'bunga_persen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tanggalMulaiMeta = const VerificationMeta(
+    'tanggalMulai',
+  );
+  @override
+  late final GeneratedColumn<DateTime> tanggalMulai = GeneratedColumn<DateTime>(
+    'tanggal_mulai',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -1217,6 +1257,10 @@ class $UtangTableTable extends UtangTable
     status,
     jatuhTempo,
     catatan,
+    jenis,
+    tenor,
+    bungaPersen,
+    tanggalMulai,
     updatedAt,
     isSynced,
     isDeleted,
@@ -1286,6 +1330,36 @@ class $UtangTableTable extends UtangTable
         catatan.isAcceptableOrUnknown(data['catatan']!, _catatanMeta),
       );
     }
+    if (data.containsKey('jenis')) {
+      context.handle(
+        _jenisMeta,
+        jenis.isAcceptableOrUnknown(data['jenis']!, _jenisMeta),
+      );
+    }
+    if (data.containsKey('tenor')) {
+      context.handle(
+        _tenorMeta,
+        tenor.isAcceptableOrUnknown(data['tenor']!, _tenorMeta),
+      );
+    }
+    if (data.containsKey('bunga_persen')) {
+      context.handle(
+        _bungaPersenMeta,
+        bungaPersen.isAcceptableOrUnknown(
+          data['bunga_persen']!,
+          _bungaPersenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('tanggal_mulai')) {
+      context.handle(
+        _tanggalMulaiMeta,
+        tanggalMulai.isAcceptableOrUnknown(
+          data['tanggal_mulai']!,
+          _tanggalMulaiMeta,
+        ),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -1343,6 +1417,22 @@ class $UtangTableTable extends UtangTable
         DriftSqlType.string,
         data['${effectivePrefix}catatan'],
       ),
+      jenis: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}jenis'],
+      ),
+      tenor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}tenor'],
+      ),
+      bungaPersen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}bunga_persen'],
+      ),
+      tanggalMulai: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}tanggal_mulai'],
+      ),
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -1372,6 +1462,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
   final String status;
   final DateTime? jatuhTempo;
   final String? catatan;
+  final String? jenis;
+  final int? tenor;
+  final double? bungaPersen;
+  final DateTime? tanggalMulai;
   final DateTime updatedAt;
   final bool isSynced;
   final bool isDeleted;
@@ -1383,6 +1477,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
     required this.status,
     this.jatuhTempo,
     this.catatan,
+    this.jenis,
+    this.tenor,
+    this.bungaPersen,
+    this.tanggalMulai,
     required this.updatedAt,
     required this.isSynced,
     required this.isDeleted,
@@ -1400,6 +1498,18 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
     }
     if (!nullToAbsent || catatan != null) {
       map['catatan'] = Variable<String>(catatan);
+    }
+    if (!nullToAbsent || jenis != null) {
+      map['jenis'] = Variable<String>(jenis);
+    }
+    if (!nullToAbsent || tenor != null) {
+      map['tenor'] = Variable<int>(tenor);
+    }
+    if (!nullToAbsent || bungaPersen != null) {
+      map['bunga_persen'] = Variable<double>(bungaPersen);
+    }
+    if (!nullToAbsent || tanggalMulai != null) {
+      map['tanggal_mulai'] = Variable<DateTime>(tanggalMulai);
     }
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['is_synced'] = Variable<bool>(isSynced);
@@ -1420,6 +1530,18 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
       catatan: catatan == null && nullToAbsent
           ? const Value.absent()
           : Value(catatan),
+      jenis: jenis == null && nullToAbsent
+          ? const Value.absent()
+          : Value(jenis),
+      tenor: tenor == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tenor),
+      bungaPersen: bungaPersen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bungaPersen),
+      tanggalMulai: tanggalMulai == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tanggalMulai),
       updatedAt: Value(updatedAt),
       isSynced: Value(isSynced),
       isDeleted: Value(isDeleted),
@@ -1439,6 +1561,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
       status: serializer.fromJson<String>(json['status']),
       jatuhTempo: serializer.fromJson<DateTime?>(json['jatuhTempo']),
       catatan: serializer.fromJson<String?>(json['catatan']),
+      jenis: serializer.fromJson<String?>(json['jenis']),
+      tenor: serializer.fromJson<int?>(json['tenor']),
+      bungaPersen: serializer.fromJson<double?>(json['bungaPersen']),
+      tanggalMulai: serializer.fromJson<DateTime?>(json['tanggalMulai']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
       isDeleted: serializer.fromJson<bool>(json['isDeleted']),
@@ -1455,6 +1581,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
       'status': serializer.toJson<String>(status),
       'jatuhTempo': serializer.toJson<DateTime?>(jatuhTempo),
       'catatan': serializer.toJson<String?>(catatan),
+      'jenis': serializer.toJson<String?>(jenis),
+      'tenor': serializer.toJson<int?>(tenor),
+      'bungaPersen': serializer.toJson<double?>(bungaPersen),
+      'tanggalMulai': serializer.toJson<DateTime?>(tanggalMulai),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'isSynced': serializer.toJson<bool>(isSynced),
       'isDeleted': serializer.toJson<bool>(isDeleted),
@@ -1469,6 +1599,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
     String? status,
     Value<DateTime?> jatuhTempo = const Value.absent(),
     Value<String?> catatan = const Value.absent(),
+    Value<String?> jenis = const Value.absent(),
+    Value<int?> tenor = const Value.absent(),
+    Value<double?> bungaPersen = const Value.absent(),
+    Value<DateTime?> tanggalMulai = const Value.absent(),
     DateTime? updatedAt,
     bool? isSynced,
     bool? isDeleted,
@@ -1480,6 +1614,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
     status: status ?? this.status,
     jatuhTempo: jatuhTempo.present ? jatuhTempo.value : this.jatuhTempo,
     catatan: catatan.present ? catatan.value : this.catatan,
+    jenis: jenis.present ? jenis.value : this.jenis,
+    tenor: tenor.present ? tenor.value : this.tenor,
+    bungaPersen: bungaPersen.present ? bungaPersen.value : this.bungaPersen,
+    tanggalMulai: tanggalMulai.present ? tanggalMulai.value : this.tanggalMulai,
     updatedAt: updatedAt ?? this.updatedAt,
     isSynced: isSynced ?? this.isSynced,
     isDeleted: isDeleted ?? this.isDeleted,
@@ -1499,6 +1637,14 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
           ? data.jatuhTempo.value
           : this.jatuhTempo,
       catatan: data.catatan.present ? data.catatan.value : this.catatan,
+      jenis: data.jenis.present ? data.jenis.value : this.jenis,
+      tenor: data.tenor.present ? data.tenor.value : this.tenor,
+      bungaPersen: data.bungaPersen.present
+          ? data.bungaPersen.value
+          : this.bungaPersen,
+      tanggalMulai: data.tanggalMulai.present
+          ? data.tanggalMulai.value
+          : this.tanggalMulai,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
       isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
@@ -1515,6 +1661,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
           ..write('status: $status, ')
           ..write('jatuhTempo: $jatuhTempo, ')
           ..write('catatan: $catatan, ')
+          ..write('jenis: $jenis, ')
+          ..write('tenor: $tenor, ')
+          ..write('bungaPersen: $bungaPersen, ')
+          ..write('tanggalMulai: $tanggalMulai, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('isSynced: $isSynced, ')
           ..write('isDeleted: $isDeleted')
@@ -1531,6 +1681,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
     status,
     jatuhTempo,
     catatan,
+    jenis,
+    tenor,
+    bungaPersen,
+    tanggalMulai,
     updatedAt,
     isSynced,
     isDeleted,
@@ -1546,6 +1700,10 @@ class UtangTableData extends DataClass implements Insertable<UtangTableData> {
           other.status == this.status &&
           other.jatuhTempo == this.jatuhTempo &&
           other.catatan == this.catatan &&
+          other.jenis == this.jenis &&
+          other.tenor == this.tenor &&
+          other.bungaPersen == this.bungaPersen &&
+          other.tanggalMulai == this.tanggalMulai &&
           other.updatedAt == this.updatedAt &&
           other.isSynced == this.isSynced &&
           other.isDeleted == this.isDeleted);
@@ -1559,6 +1717,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
   final Value<String> status;
   final Value<DateTime?> jatuhTempo;
   final Value<String?> catatan;
+  final Value<String?> jenis;
+  final Value<int?> tenor;
+  final Value<double?> bungaPersen;
+  final Value<DateTime?> tanggalMulai;
   final Value<DateTime> updatedAt;
   final Value<bool> isSynced;
   final Value<bool> isDeleted;
@@ -1571,6 +1733,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
     this.status = const Value.absent(),
     this.jatuhTempo = const Value.absent(),
     this.catatan = const Value.absent(),
+    this.jenis = const Value.absent(),
+    this.tenor = const Value.absent(),
+    this.bungaPersen = const Value.absent(),
+    this.tanggalMulai = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.isSynced = const Value.absent(),
     this.isDeleted = const Value.absent(),
@@ -1584,6 +1750,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
     required String status,
     this.jatuhTempo = const Value.absent(),
     this.catatan = const Value.absent(),
+    this.jenis = const Value.absent(),
+    this.tenor = const Value.absent(),
+    this.bungaPersen = const Value.absent(),
+    this.tanggalMulai = const Value.absent(),
     required DateTime updatedAt,
     this.isSynced = const Value.absent(),
     this.isDeleted = const Value.absent(),
@@ -1601,6 +1771,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
     Expression<String>? status,
     Expression<DateTime>? jatuhTempo,
     Expression<String>? catatan,
+    Expression<String>? jenis,
+    Expression<int>? tenor,
+    Expression<double>? bungaPersen,
+    Expression<DateTime>? tanggalMulai,
     Expression<DateTime>? updatedAt,
     Expression<bool>? isSynced,
     Expression<bool>? isDeleted,
@@ -1614,6 +1788,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
       if (status != null) 'status': status,
       if (jatuhTempo != null) 'jatuh_tempo': jatuhTempo,
       if (catatan != null) 'catatan': catatan,
+      if (jenis != null) 'jenis': jenis,
+      if (tenor != null) 'tenor': tenor,
+      if (bungaPersen != null) 'bunga_persen': bungaPersen,
+      if (tanggalMulai != null) 'tanggal_mulai': tanggalMulai,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (isSynced != null) 'is_synced': isSynced,
       if (isDeleted != null) 'is_deleted': isDeleted,
@@ -1629,6 +1807,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
     Value<String>? status,
     Value<DateTime?>? jatuhTempo,
     Value<String?>? catatan,
+    Value<String?>? jenis,
+    Value<int?>? tenor,
+    Value<double?>? bungaPersen,
+    Value<DateTime?>? tanggalMulai,
     Value<DateTime>? updatedAt,
     Value<bool>? isSynced,
     Value<bool>? isDeleted,
@@ -1642,6 +1824,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
       status: status ?? this.status,
       jatuhTempo: jatuhTempo ?? this.jatuhTempo,
       catatan: catatan ?? this.catatan,
+      jenis: jenis ?? this.jenis,
+      tenor: tenor ?? this.tenor,
+      bungaPersen: bungaPersen ?? this.bungaPersen,
+      tanggalMulai: tanggalMulai ?? this.tanggalMulai,
       updatedAt: updatedAt ?? this.updatedAt,
       isSynced: isSynced ?? this.isSynced,
       isDeleted: isDeleted ?? this.isDeleted,
@@ -1673,6 +1859,18 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
     if (catatan.present) {
       map['catatan'] = Variable<String>(catatan.value);
     }
+    if (jenis.present) {
+      map['jenis'] = Variable<String>(jenis.value);
+    }
+    if (tenor.present) {
+      map['tenor'] = Variable<int>(tenor.value);
+    }
+    if (bungaPersen.present) {
+      map['bunga_persen'] = Variable<double>(bungaPersen.value);
+    }
+    if (tanggalMulai.present) {
+      map['tanggal_mulai'] = Variable<DateTime>(tanggalMulai.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -1698,6 +1896,10 @@ class UtangTableCompanion extends UpdateCompanion<UtangTableData> {
           ..write('status: $status, ')
           ..write('jatuhTempo: $jatuhTempo, ')
           ..write('catatan: $catatan, ')
+          ..write('jenis: $jenis, ')
+          ..write('tenor: $tenor, ')
+          ..write('bungaPersen: $bungaPersen, ')
+          ..write('tanggalMulai: $tanggalMulai, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('isSynced: $isSynced, ')
           ..write('isDeleted: $isDeleted, ')
@@ -2904,6 +3106,10 @@ typedef $$UtangTableTableCreateCompanionBuilder =
       required String status,
       Value<DateTime?> jatuhTempo,
       Value<String?> catatan,
+      Value<String?> jenis,
+      Value<int?> tenor,
+      Value<double?> bungaPersen,
+      Value<DateTime?> tanggalMulai,
       required DateTime updatedAt,
       Value<bool> isSynced,
       Value<bool> isDeleted,
@@ -2918,6 +3124,10 @@ typedef $$UtangTableTableUpdateCompanionBuilder =
       Value<String> status,
       Value<DateTime?> jatuhTempo,
       Value<String?> catatan,
+      Value<String?> jenis,
+      Value<int?> tenor,
+      Value<double?> bungaPersen,
+      Value<DateTime?> tanggalMulai,
       Value<DateTime> updatedAt,
       Value<bool> isSynced,
       Value<bool> isDeleted,
@@ -2965,6 +3175,26 @@ class $$UtangTableTableFilterComposer
 
   ColumnFilters<String> get catatan => $composableBuilder(
     column: $table.catatan,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get jenis => $composableBuilder(
+    column: $table.jenis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get tenor => $composableBuilder(
+    column: $table.tenor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get bungaPersen => $composableBuilder(
+    column: $table.bungaPersen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3028,6 +3258,26 @@ class $$UtangTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get jenis => $composableBuilder(
+    column: $table.jenis,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get tenor => $composableBuilder(
+    column: $table.tenor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get bungaPersen => $composableBuilder(
+    column: $table.bungaPersen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -3080,6 +3330,22 @@ class $$UtangTableTableAnnotationComposer
   GeneratedColumn<String> get catatan =>
       $composableBuilder(column: $table.catatan, builder: (column) => column);
 
+  GeneratedColumn<String> get jenis =>
+      $composableBuilder(column: $table.jenis, builder: (column) => column);
+
+  GeneratedColumn<int> get tenor =>
+      $composableBuilder(column: $table.tenor, builder: (column) => column);
+
+  GeneratedColumn<double> get bungaPersen => $composableBuilder(
+    column: $table.bungaPersen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
@@ -3128,6 +3394,10 @@ class $$UtangTableTableTableManager
                 Value<String> status = const Value.absent(),
                 Value<DateTime?> jatuhTempo = const Value.absent(),
                 Value<String?> catatan = const Value.absent(),
+                Value<String?> jenis = const Value.absent(),
+                Value<int?> tenor = const Value.absent(),
+                Value<double?> bungaPersen = const Value.absent(),
+                Value<DateTime?> tanggalMulai = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
                 Value<bool> isDeleted = const Value.absent(),
@@ -3140,6 +3410,10 @@ class $$UtangTableTableTableManager
                 status: status,
                 jatuhTempo: jatuhTempo,
                 catatan: catatan,
+                jenis: jenis,
+                tenor: tenor,
+                bungaPersen: bungaPersen,
+                tanggalMulai: tanggalMulai,
                 updatedAt: updatedAt,
                 isSynced: isSynced,
                 isDeleted: isDeleted,
@@ -3154,6 +3428,10 @@ class $$UtangTableTableTableManager
                 required String status,
                 Value<DateTime?> jatuhTempo = const Value.absent(),
                 Value<String?> catatan = const Value.absent(),
+                Value<String?> jenis = const Value.absent(),
+                Value<int?> tenor = const Value.absent(),
+                Value<double?> bungaPersen = const Value.absent(),
+                Value<DateTime?> tanggalMulai = const Value.absent(),
                 required DateTime updatedAt,
                 Value<bool> isSynced = const Value.absent(),
                 Value<bool> isDeleted = const Value.absent(),
@@ -3166,6 +3444,10 @@ class $$UtangTableTableTableManager
                 status: status,
                 jatuhTempo: jatuhTempo,
                 catatan: catatan,
+                jenis: jenis,
+                tenor: tenor,
+                bungaPersen: bungaPersen,
+                tanggalMulai: tanggalMulai,
                 updatedAt: updatedAt,
                 isSynced: isSynced,
                 isDeleted: isDeleted,

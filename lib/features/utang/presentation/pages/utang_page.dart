@@ -34,6 +34,10 @@ class _UtangPageState extends State<UtangPage> {
             jumlahTotal: result.jumlahTotal,
             jatuhTempo: result.jatuhTempo,
             catatan: result.catatan,
+            jenis: result.jenis,
+            tenor: result.tenor,
+            bungaPersen: result.bungaPersen,
+            tanggalMulai: result.tanggalMulai,
           ));
     }
   }
@@ -42,11 +46,18 @@ class _UtangPageState extends State<UtangPage> {
     final result = await showUtangFormDialog(context, existing: utang);
     if (result != null && mounted) {
       context.read<UtangBloc>().add(UtangUpdateRequested(
-            utang.copyWith(
+            UtangEntity(
+              id: utang.id,
               namaUtang: result.namaUtang,
               jumlahTotal: result.jumlahTotal,
+              jumlahTerbayar: utang.jumlahTerbayar,
+              status: utang.status,
               jatuhTempo: result.jatuhTempo,
               catatan: result.catatan,
+              jenis: result.jenis,
+              tenor: result.tenor,
+              bungaPersen: result.bungaPersen,
+              tanggalMulai: result.tanggalMulai,
             ),
           ));
     }

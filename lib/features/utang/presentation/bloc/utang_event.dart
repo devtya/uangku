@@ -17,16 +17,25 @@ class UtangAddRequested extends UtangEvent {
   final double jumlahTotal;
   final DateTime? jatuhTempo;
   final String? catatan;
+  final String jenis;
+  final int? tenor;
+  final double? bungaPersen;
+  final DateTime? tanggalMulai;
 
   const UtangAddRequested({
     required this.namaUtang,
     required this.jumlahTotal,
     this.jatuhTempo,
     this.catatan,
+    required this.jenis,
+    this.tenor,
+    this.bungaPersen,
+    this.tanggalMulai,
   });
 
   @override
-  List<Object?> get props => [namaUtang, jumlahTotal, jatuhTempo, catatan];
+  List<Object?> get props =>
+      [namaUtang, jumlahTotal, jatuhTempo, catatan, jenis, tenor, bungaPersen, tanggalMulai];
 }
 
 class UtangUpdateRequested extends UtangEvent {
