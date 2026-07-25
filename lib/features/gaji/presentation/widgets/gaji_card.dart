@@ -6,13 +6,11 @@ import 'package:uangku/features/gaji/domain/entities/gaji_entity.dart';
 class GajiCard extends StatelessWidget {
   final GajiEntity gaji;
   final VoidCallback onTap;
-  final VoidCallback onDelete;
 
   const GajiCard({
     super.key,
     required this.gaji,
     required this.onTap,
-    required this.onDelete,
   });
 
   @override
@@ -85,19 +83,6 @@ class GajiCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: AppColors.primary,
                 fontFeatures: [FontFeature.tabularFigures()],
-              ),
-            ),
-            const SizedBox(width: 4),
-            InkWell(
-              onTap: onDelete,
-              borderRadius: BorderRadius.circular(8),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                  Icons.delete_outline,
-                  size: 18,
-                  color: AppColors.textMuted,
-                ),
               ),
             ),
           ],

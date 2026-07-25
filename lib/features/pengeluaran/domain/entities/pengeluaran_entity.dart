@@ -6,6 +6,7 @@ class PengeluaranEntity extends Equatable {
   final String kategoriId;
   final DateTime tanggal;
   final String? catatan;
+  final String? utangId;
 
   const PengeluaranEntity({
     required this.id,
@@ -13,6 +14,7 @@ class PengeluaranEntity extends Equatable {
     required this.kategoriId,
     required this.tanggal,
     this.catatan,
+    this.utangId,
   });
 
   PengeluaranEntity copyWith({
@@ -21,6 +23,7 @@ class PengeluaranEntity extends Equatable {
     String? kategoriId,
     DateTime? tanggal,
     String? catatan,
+    String? utangId,
   }) {
     return PengeluaranEntity(
       id: id ?? this.id,
@@ -28,9 +31,10 @@ class PengeluaranEntity extends Equatable {
       kategoriId: kategoriId ?? this.kategoriId,
       tanggal: tanggal ?? this.tanggal,
       catatan: catatan ?? this.catatan,
+      utangId: utangId ?? this.utangId,
     );
   }
 
   @override
-  List<Object?> get props => [id, jumlah, kategoriId, tanggal, catatan];
+  List<Object?> get props => [id, jumlah, kategoriId, tanggal, catatan, utangId];
 }

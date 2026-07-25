@@ -58,6 +58,7 @@ class BayarCicilanUtang {
           kategoriId: kategoriId,
           tanggal: tanggal,
           catatan: 'Cicilan: ${utang.namaUtang}',
+          utangId: utangId,
         ),
       );
       if (resPengeluaran.isLeft()) {

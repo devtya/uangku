@@ -6,6 +6,8 @@ class PengeluaranTable extends Table {
   TextColumn get kategoriId => text()();
   DateTimeColumn get tanggal => dateTime()();
   TextColumn? get catatan => text().nullable()();
+  // Diisi hanya untuk entry hasil "Bayar cicilan" (referensi ke utang terkait).
+  TextColumn? get utangId => text().nullable()();
   DateTimeColumn get updatedAt => dateTime()();
   BoolColumn get isSynced => boolean().withDefault(const Constant(false))();
   BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();

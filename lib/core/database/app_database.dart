@@ -27,7 +27,17 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (m, from, to) async {
+          // v2: tautkan entry cicilan ke utang terkait.
+          if (from < 2) {
+            await m.addColumn(pengeluaranTable, pengeluaranTable.utangId);
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

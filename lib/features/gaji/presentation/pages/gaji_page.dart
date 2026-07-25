@@ -7,6 +7,7 @@ import 'package:uangku/features/gaji/presentation/bloc/gaji_bloc.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_event.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_state.dart';
 import 'package:uangku/features/gaji/presentation/widgets/gaji_card.dart';
+import 'package:uangku/features/gaji/presentation/widgets/gaji_detail_dialog.dart';
 import 'package:uangku/features/gaji/presentation/widgets/gaji_form_dialog.dart';
 
 class GajiPage extends StatefulWidget {
@@ -31,6 +32,20 @@ class _GajiPageState extends State<GajiPage> {
             tanggal: result.tanggal,
             catatan: result.catatan,
           ));
+    }
+  }
+
+  Future<void> _showDetail(GajiEntity gaji) async {
+    final action = await showGajiDetailDialog(context, gaji: gaji);
+    if (!mounted || action == null) return;
+    switch (action) {
+      case GajiDetailAction.edit:
+        _showEditDialog(gaji);
+      case GajiDetailAction.hapus:
+        final confirmed = await _confirmDelete(gaji.id);
+        if (confirmed && mounted) {
+          context.read<GajiBloc>().add(GajiDeleteRequested(gaji.id));
+        }
     }
   }
 
@@ -219,15 +234,7 @@ class _GajiPageState extends State<GajiPage> {
                               ...list.map(
                                 (gaji) => GajiCard(
                                   gaji: gaji,
-                                  onTap: () => _showEditDialog(gaji),
-                                  onDelete: () async {
-                                    final confirmed = await _confirmDelete(gaji.id);
-                                    if (confirmed && mounted) {
-                                      context
-                                          .read<GajiBloc>()
-                                          .add(GajiDeleteRequested(gaji.id));
-                                    }
-                                  },
+                                  onTap: () => _showDetail(gaji),
                                 ),
                               ),
                           ],

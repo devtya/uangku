@@ -16,6 +16,15 @@ class PengeluaranLocalDataSource {
         );
   }
 
+  Stream<List<PengeluaranModel>> watchByUtangId(String utangId) {
+    final query = _db.select(_db.pengeluaranTable)
+      ..where((t) => t.utangId.equals(utangId) & t.isDeleted.equals(false))
+      ..orderBy([(t) => OrderingTerm(expression: t.tanggal, mode: OrderingMode.desc)]);
+    return query.watch().map(
+          (rows) => rows.map((row) => PengeluaranModel.fromDrift(row)).toList(),
+        );
+  }
+
   Future<void> addPengeluaran(PengeluaranModel model) async {
     await _db.into(_db.pengeluaranTable).insert(model.toCompanion());
   }

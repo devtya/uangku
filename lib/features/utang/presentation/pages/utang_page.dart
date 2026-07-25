@@ -9,6 +9,7 @@ import 'package:uangku/features/utang/presentation/bloc/utang_event.dart';
 import 'package:uangku/features/utang/presentation/bloc/utang_state.dart';
 import 'package:uangku/features/utang/presentation/widgets/bayar_cicilan_dialog.dart';
 import 'package:uangku/features/utang/presentation/widgets/utang_card.dart';
+import 'package:uangku/features/utang/presentation/widgets/utang_detail_dialog.dart';
 import 'package:uangku/features/utang/presentation/widgets/utang_form_dialog.dart';
 
 class UtangPage extends StatefulWidget {
@@ -48,6 +49,22 @@ class _UtangPageState extends State<UtangPage> {
               catatan: result.catatan,
             ),
           ));
+    }
+  }
+
+  Future<void> _showDetail(UtangEntity utang) async {
+    final action = await showUtangDetailDialog(context, utang: utang);
+    if (!mounted || action == null) return;
+    switch (action) {
+      case UtangDetailAction.edit:
+        _showEditDialog(utang);
+      case UtangDetailAction.bayar:
+        _showBayarDialog(utang);
+      case UtangDetailAction.hapus:
+        final confirmed = await _confirmDelete();
+        if (confirmed && mounted) {
+          context.read<UtangBloc>().add(UtangDeleteRequested(utang.id));
+        }
     }
   }
 
@@ -216,14 +233,7 @@ class _UtangPageState extends State<UtangPage> {
           ...list.map(
             (u) => UtangCard(
               utang: u,
-              onTap: () => _showEditDialog(u),
-              onBayar: () => _showBayarDialog(u),
-              onDelete: () async {
-                final confirmed = await _confirmDelete();
-                if (confirmed && mounted) {
-                  context.read<UtangBloc>().add(UtangDeleteRequested(u.id));
-                }
-              },
+              onTap: () => _showDetail(u),
             ),
           ),
       ],

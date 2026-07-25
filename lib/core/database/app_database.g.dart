@@ -518,6 +518,17 @@ class $PengeluaranTableTable extends PengeluaranTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _utangIdMeta = const VerificationMeta(
+    'utangId',
+  );
+  @override
+  late final GeneratedColumn<String> utangId = GeneratedColumn<String>(
+    'utang_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -566,6 +577,7 @@ class $PengeluaranTableTable extends PengeluaranTable
     kategoriId,
     tanggal,
     catatan,
+    utangId,
     updatedAt,
     isSynced,
     isDeleted,
@@ -617,6 +629,12 @@ class $PengeluaranTableTable extends PengeluaranTable
         catatan.isAcceptableOrUnknown(data['catatan']!, _catatanMeta),
       );
     }
+    if (data.containsKey('utang_id')) {
+      context.handle(
+        _utangIdMeta,
+        utangId.isAcceptableOrUnknown(data['utang_id']!, _utangIdMeta),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -666,6 +684,10 @@ class $PengeluaranTableTable extends PengeluaranTable
         DriftSqlType.string,
         data['${effectivePrefix}catatan'],
       ),
+      utangId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}utang_id'],
+      ),
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -694,6 +716,7 @@ class PengeluaranTableData extends DataClass
   final String kategoriId;
   final DateTime tanggal;
   final String? catatan;
+  final String? utangId;
   final DateTime updatedAt;
   final bool isSynced;
   final bool isDeleted;
@@ -703,6 +726,7 @@ class PengeluaranTableData extends DataClass
     required this.kategoriId,
     required this.tanggal,
     this.catatan,
+    this.utangId,
     required this.updatedAt,
     required this.isSynced,
     required this.isDeleted,
@@ -716,6 +740,9 @@ class PengeluaranTableData extends DataClass
     map['tanggal'] = Variable<DateTime>(tanggal);
     if (!nullToAbsent || catatan != null) {
       map['catatan'] = Variable<String>(catatan);
+    }
+    if (!nullToAbsent || utangId != null) {
+      map['utang_id'] = Variable<String>(utangId);
     }
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['is_synced'] = Variable<bool>(isSynced);
@@ -732,6 +759,9 @@ class PengeluaranTableData extends DataClass
       catatan: catatan == null && nullToAbsent
           ? const Value.absent()
           : Value(catatan),
+      utangId: utangId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(utangId),
       updatedAt: Value(updatedAt),
       isSynced: Value(isSynced),
       isDeleted: Value(isDeleted),
@@ -749,6 +779,7 @@ class PengeluaranTableData extends DataClass
       kategoriId: serializer.fromJson<String>(json['kategoriId']),
       tanggal: serializer.fromJson<DateTime>(json['tanggal']),
       catatan: serializer.fromJson<String?>(json['catatan']),
+      utangId: serializer.fromJson<String?>(json['utangId']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       isSynced: serializer.fromJson<bool>(json['isSynced']),
       isDeleted: serializer.fromJson<bool>(json['isDeleted']),
@@ -763,6 +794,7 @@ class PengeluaranTableData extends DataClass
       'kategoriId': serializer.toJson<String>(kategoriId),
       'tanggal': serializer.toJson<DateTime>(tanggal),
       'catatan': serializer.toJson<String?>(catatan),
+      'utangId': serializer.toJson<String?>(utangId),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'isSynced': serializer.toJson<bool>(isSynced),
       'isDeleted': serializer.toJson<bool>(isDeleted),
@@ -775,6 +807,7 @@ class PengeluaranTableData extends DataClass
     String? kategoriId,
     DateTime? tanggal,
     Value<String?> catatan = const Value.absent(),
+    Value<String?> utangId = const Value.absent(),
     DateTime? updatedAt,
     bool? isSynced,
     bool? isDeleted,
@@ -784,6 +817,7 @@ class PengeluaranTableData extends DataClass
     kategoriId: kategoriId ?? this.kategoriId,
     tanggal: tanggal ?? this.tanggal,
     catatan: catatan.present ? catatan.value : this.catatan,
+    utangId: utangId.present ? utangId.value : this.utangId,
     updatedAt: updatedAt ?? this.updatedAt,
     isSynced: isSynced ?? this.isSynced,
     isDeleted: isDeleted ?? this.isDeleted,
@@ -797,6 +831,7 @@ class PengeluaranTableData extends DataClass
           : this.kategoriId,
       tanggal: data.tanggal.present ? data.tanggal.value : this.tanggal,
       catatan: data.catatan.present ? data.catatan.value : this.catatan,
+      utangId: data.utangId.present ? data.utangId.value : this.utangId,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
       isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
@@ -811,6 +846,7 @@ class PengeluaranTableData extends DataClass
           ..write('kategoriId: $kategoriId, ')
           ..write('tanggal: $tanggal, ')
           ..write('catatan: $catatan, ')
+          ..write('utangId: $utangId, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('isSynced: $isSynced, ')
           ..write('isDeleted: $isDeleted')
@@ -825,6 +861,7 @@ class PengeluaranTableData extends DataClass
     kategoriId,
     tanggal,
     catatan,
+    utangId,
     updatedAt,
     isSynced,
     isDeleted,
@@ -838,6 +875,7 @@ class PengeluaranTableData extends DataClass
           other.kategoriId == this.kategoriId &&
           other.tanggal == this.tanggal &&
           other.catatan == this.catatan &&
+          other.utangId == this.utangId &&
           other.updatedAt == this.updatedAt &&
           other.isSynced == this.isSynced &&
           other.isDeleted == this.isDeleted);
@@ -849,6 +887,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
   final Value<String> kategoriId;
   final Value<DateTime> tanggal;
   final Value<String?> catatan;
+  final Value<String?> utangId;
   final Value<DateTime> updatedAt;
   final Value<bool> isSynced;
   final Value<bool> isDeleted;
@@ -859,6 +898,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
     this.kategoriId = const Value.absent(),
     this.tanggal = const Value.absent(),
     this.catatan = const Value.absent(),
+    this.utangId = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.isSynced = const Value.absent(),
     this.isDeleted = const Value.absent(),
@@ -870,6 +910,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
     required String kategoriId,
     required DateTime tanggal,
     this.catatan = const Value.absent(),
+    this.utangId = const Value.absent(),
     required DateTime updatedAt,
     this.isSynced = const Value.absent(),
     this.isDeleted = const Value.absent(),
@@ -885,6 +926,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
     Expression<String>? kategoriId,
     Expression<DateTime>? tanggal,
     Expression<String>? catatan,
+    Expression<String>? utangId,
     Expression<DateTime>? updatedAt,
     Expression<bool>? isSynced,
     Expression<bool>? isDeleted,
@@ -896,6 +938,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
       if (kategoriId != null) 'kategori_id': kategoriId,
       if (tanggal != null) 'tanggal': tanggal,
       if (catatan != null) 'catatan': catatan,
+      if (utangId != null) 'utang_id': utangId,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (isSynced != null) 'is_synced': isSynced,
       if (isDeleted != null) 'is_deleted': isDeleted,
@@ -909,6 +952,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
     Value<String>? kategoriId,
     Value<DateTime>? tanggal,
     Value<String?>? catatan,
+    Value<String?>? utangId,
     Value<DateTime>? updatedAt,
     Value<bool>? isSynced,
     Value<bool>? isDeleted,
@@ -920,6 +964,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
       kategoriId: kategoriId ?? this.kategoriId,
       tanggal: tanggal ?? this.tanggal,
       catatan: catatan ?? this.catatan,
+      utangId: utangId ?? this.utangId,
       updatedAt: updatedAt ?? this.updatedAt,
       isSynced: isSynced ?? this.isSynced,
       isDeleted: isDeleted ?? this.isDeleted,
@@ -945,6 +990,9 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
     if (catatan.present) {
       map['catatan'] = Variable<String>(catatan.value);
     }
+    if (utangId.present) {
+      map['utang_id'] = Variable<String>(utangId.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -968,6 +1016,7 @@ class PengeluaranTableCompanion extends UpdateCompanion<PengeluaranTableData> {
           ..write('kategoriId: $kategoriId, ')
           ..write('tanggal: $tanggal, ')
           ..write('catatan: $catatan, ')
+          ..write('utangId: $utangId, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('isSynced: $isSynced, ')
           ..write('isDeleted: $isDeleted, ')
@@ -2272,6 +2321,7 @@ typedef $$PengeluaranTableTableCreateCompanionBuilder =
       required String kategoriId,
       required DateTime tanggal,
       Value<String?> catatan,
+      Value<String?> utangId,
       required DateTime updatedAt,
       Value<bool> isSynced,
       Value<bool> isDeleted,
@@ -2284,6 +2334,7 @@ typedef $$PengeluaranTableTableUpdateCompanionBuilder =
       Value<String> kategoriId,
       Value<DateTime> tanggal,
       Value<String?> catatan,
+      Value<String?> utangId,
       Value<DateTime> updatedAt,
       Value<bool> isSynced,
       Value<bool> isDeleted,
@@ -2321,6 +2372,11 @@ class $$PengeluaranTableTableFilterComposer
 
   ColumnFilters<String> get catatan => $composableBuilder(
     column: $table.catatan,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get utangId => $composableBuilder(
+    column: $table.utangId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2374,6 +2430,11 @@ class $$PengeluaranTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get utangId => $composableBuilder(
+    column: $table.utangId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -2415,6 +2476,9 @@ class $$PengeluaranTableTableAnnotationComposer
 
   GeneratedColumn<String> get catatan =>
       $composableBuilder(column: $table.catatan, builder: (column) => column);
+
+  GeneratedColumn<String> get utangId =>
+      $composableBuilder(column: $table.utangId, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -2468,6 +2532,7 @@ class $$PengeluaranTableTableTableManager
                 Value<String> kategoriId = const Value.absent(),
                 Value<DateTime> tanggal = const Value.absent(),
                 Value<String?> catatan = const Value.absent(),
+                Value<String?> utangId = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> isSynced = const Value.absent(),
                 Value<bool> isDeleted = const Value.absent(),
@@ -2478,6 +2543,7 @@ class $$PengeluaranTableTableTableManager
                 kategoriId: kategoriId,
                 tanggal: tanggal,
                 catatan: catatan,
+                utangId: utangId,
                 updatedAt: updatedAt,
                 isSynced: isSynced,
                 isDeleted: isDeleted,
@@ -2490,6 +2556,7 @@ class $$PengeluaranTableTableTableManager
                 required String kategoriId,
                 required DateTime tanggal,
                 Value<String?> catatan = const Value.absent(),
+                Value<String?> utangId = const Value.absent(),
                 required DateTime updatedAt,
                 Value<bool> isSynced = const Value.absent(),
                 Value<bool> isDeleted = const Value.absent(),
@@ -2500,6 +2567,7 @@ class $$PengeluaranTableTableTableManager
                 kategoriId: kategoriId,
                 tanggal: tanggal,
                 catatan: catatan,
+                utangId: utangId,
                 updatedAt: updatedAt,
                 isSynced: isSynced,
                 isDeleted: isDeleted,

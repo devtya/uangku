@@ -36,6 +36,7 @@ import 'package:uangku/features/utang/domain/repositories/utang_repository.dart'
 import 'package:uangku/core/constants/app_constants.dart';
 import 'package:uangku/features/utang/domain/usecases/add_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/bayar_cicilan_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/watch_cicilan_by_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/delete_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/update_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
@@ -130,6 +131,7 @@ Future<void> initDependencies() async {
 
   // Orkestrasi lintas-fitur: inject Utang + Pengeluaran + Kategori repository.
   sl.registerLazySingleton(() => BayarCicilanUtang(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => WatchCicilanByUtang(sl()));
 
   sl.registerFactory(
     () => UtangBloc(

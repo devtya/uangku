@@ -4,6 +4,7 @@ import 'package:uangku/features/pengeluaran/domain/entities/pengeluaran_entity.d
 
 abstract class PengeluaranRepository {
   Stream<List<PengeluaranEntity>> watchAllPengeluaran();
+  Stream<List<PengeluaranEntity>> watchByUtangId(String utangId);
   Future<Either<Failure, void>> addPengeluaran(PengeluaranEntity pengeluaran);
   Future<Either<Failure, void>> updatePengeluaran(PengeluaranEntity pengeluaran);
   Future<Either<Failure, void>> deletePengeluaran(String id);

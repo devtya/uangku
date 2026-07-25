@@ -18,6 +18,13 @@ class PengeluaranRepositoryImpl implements PengeluaranRepository {
   }
 
   @override
+  Stream<List<PengeluaranEntity>> watchByUtangId(String utangId) {
+    return _localDataSource.watchByUtangId(utangId).map(
+          (models) => models.map((m) => m.toEntity()).toList(),
+        );
+  }
+
+  @override
   Future<Either<Failure, void>> addPengeluaran(PengeluaranEntity pengeluaran) async {
     try {
       await _localDataSource.addPengeluaran(PengeluaranModel.fromEntity(pengeluaran));

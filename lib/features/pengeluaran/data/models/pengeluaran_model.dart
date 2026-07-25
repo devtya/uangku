@@ -8,6 +8,7 @@ class PengeluaranModel {
   final String kategoriId;
   final DateTime tanggal;
   final String? catatan;
+  final String? utangId;
   final DateTime updatedAt;
   final bool isSynced;
   final bool isDeleted;
@@ -18,6 +19,7 @@ class PengeluaranModel {
     required this.kategoriId,
     required this.tanggal,
     this.catatan,
+    this.utangId,
     required this.updatedAt,
     required this.isSynced,
     required this.isDeleted,
@@ -30,6 +32,7 @@ class PengeluaranModel {
       kategoriId: entity.kategoriId,
       tanggal: entity.tanggal,
       catatan: entity.catatan,
+      utangId: entity.utangId,
       updatedAt: DateTime.now(),
       isSynced: false,
       isDeleted: false,
@@ -43,6 +46,7 @@ class PengeluaranModel {
       kategoriId: kategoriId,
       tanggal: tanggal,
       catatan: catatan,
+      utangId: utangId,
     );
   }
 
@@ -53,6 +57,7 @@ class PengeluaranModel {
       kategoriId: data.kategoriId,
       tanggal: data.tanggal,
       catatan: data.catatan,
+      utangId: data.utangId,
       updatedAt: data.updatedAt,
       isSynced: data.isSynced,
       isDeleted: data.isDeleted,
@@ -66,6 +71,7 @@ class PengeluaranModel {
       kategoriId: Value(kategoriId),
       tanggal: Value(tanggal),
       catatan: Value(catatan),
+      utangId: Value(utangId),
       updatedAt: Value(updatedAt),
       isSynced: Value(isSynced),
       isDeleted: Value(isDeleted),
