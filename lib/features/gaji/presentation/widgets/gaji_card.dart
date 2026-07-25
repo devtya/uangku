@@ -72,6 +72,24 @@ class GajiCard extends StatelessWidget {
                       color: AppColors.textSecondary,
                     ),
                   ),
+                  if (gaji.jumlahTersimpan > 0) ...[
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        const Icon(Icons.lock_outline,
+                            size: 11, color: AppColors.textMuted),
+                        const SizedBox(width: 3),
+                        Text(
+                          'Ditabung ${currencyFormat.format(gaji.jumlahTersimpan)}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textMuted,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

@@ -14,17 +14,19 @@ class GajiWatchRequested extends GajiEvent {
 
 class GajiAddRequested extends GajiEvent {
   final double jumlah;
+  final double jumlahBebas;
   final DateTime tanggal;
   final String? catatan;
 
   const GajiAddRequested({
     required this.jumlah,
+    required this.jumlahBebas,
     required this.tanggal,
     this.catatan,
   });
 
   @override
-  List<Object?> get props => [jumlah, tanggal, catatan];
+  List<Object?> get props => [jumlah, jumlahBebas, tanggal, catatan];
 }
 
 class GajiUpdateRequested extends GajiEvent {

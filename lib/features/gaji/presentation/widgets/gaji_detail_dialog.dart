@@ -54,7 +54,9 @@ Future<GajiDetailAction?> showGajiDetailDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _DetailRow('Jumlah', rp.format(gaji.jumlah)),
+          _DetailRow('Total', rp.format(gaji.jumlah)),
+          _DetailRow('Bebas dipakai', rp.format(gaji.jumlahBebas)),
+          _DetailRow('Tersimpan', rp.format(gaji.jumlahTersimpan)),
           _DetailRow('Tanggal', dateFormat.format(gaji.tanggal)),
           if (gaji.catatan != null && gaji.catatan!.isNotEmpty)
             _DetailRow('Catatan', gaji.catatan!),

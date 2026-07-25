@@ -5,6 +5,7 @@ import 'package:uangku/features/gaji/domain/entities/gaji_entity.dart';
 class GajiModel {
   final String id;
   final double jumlah;
+  final double jumlahBebas;
   final DateTime tanggal;
   final String? catatan;
   final DateTime updatedAt;
@@ -14,6 +15,7 @@ class GajiModel {
   const GajiModel({
     required this.id,
     required this.jumlah,
+    required this.jumlahBebas,
     required this.tanggal,
     this.catatan,
     required this.updatedAt,
@@ -25,6 +27,7 @@ class GajiModel {
     return GajiModel(
       id: entity.id,
       jumlah: entity.jumlah,
+      jumlahBebas: entity.jumlahBebas,
       tanggal: entity.tanggal,
       catatan: entity.catatan,
       updatedAt: DateTime.now(),
@@ -37,6 +40,7 @@ class GajiModel {
     return GajiEntity(
       id: id,
       jumlah: jumlah,
+      jumlahBebas: jumlahBebas,
       tanggal: tanggal,
       catatan: catatan,
     );
@@ -46,6 +50,8 @@ class GajiModel {
     return GajiModel(
       id: data.id,
       jumlah: data.jumlah,
+      // Baris lama (null) dianggap bebas penuh agar saldo lama tak berubah.
+      jumlahBebas: data.jumlahBebas ?? data.jumlah,
       tanggal: data.tanggal,
       catatan: data.catatan,
       updatedAt: data.updatedAt,
@@ -58,6 +64,7 @@ class GajiModel {
     return GajiTableCompanion(
       id: Value(id),
       jumlah: Value(jumlah),
+      jumlahBebas: Value(jumlahBebas),
       tanggal: Value(tanggal),
       catatan: Value(catatan),
       updatedAt: Value(updatedAt),

@@ -27,6 +27,17 @@ class $GajiTableTable extends GajiTable
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _jumlahBebasMeta = const VerificationMeta(
+    'jumlahBebas',
+  );
+  @override
+  late final GeneratedColumn<double> jumlahBebas = GeneratedColumn<double>(
+    'jumlah_bebas',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _tanggalMeta = const VerificationMeta(
     'tanggal',
   );
@@ -94,6 +105,7 @@ class $GajiTableTable extends GajiTable
   List<GeneratedColumn> get $columns => [
     id,
     jumlah,
+    jumlahBebas,
     tanggal,
     catatan,
     updatedAt,
@@ -124,6 +136,15 @@ class $GajiTableTable extends GajiTable
       );
     } else if (isInserting) {
       context.missing(_jumlahMeta);
+    }
+    if (data.containsKey('jumlah_bebas')) {
+      context.handle(
+        _jumlahBebasMeta,
+        jumlahBebas.isAcceptableOrUnknown(
+          data['jumlah_bebas']!,
+          _jumlahBebasMeta,
+        ),
+      );
     }
     if (data.containsKey('tanggal')) {
       context.handle(
@@ -176,6 +197,10 @@ class $GajiTableTable extends GajiTable
         DriftSqlType.double,
         data['${effectivePrefix}jumlah'],
       )!,
+      jumlahBebas: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}jumlah_bebas'],
+      ),
       tanggal: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}tanggal'],
@@ -208,6 +233,7 @@ class $GajiTableTable extends GajiTable
 class GajiTableData extends DataClass implements Insertable<GajiTableData> {
   final String id;
   final double jumlah;
+  final double? jumlahBebas;
   final DateTime tanggal;
   final String? catatan;
   final DateTime updatedAt;
@@ -216,6 +242,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
   const GajiTableData({
     required this.id,
     required this.jumlah,
+    this.jumlahBebas,
     required this.tanggal,
     this.catatan,
     required this.updatedAt,
@@ -227,6 +254,9 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['jumlah'] = Variable<double>(jumlah);
+    if (!nullToAbsent || jumlahBebas != null) {
+      map['jumlah_bebas'] = Variable<double>(jumlahBebas);
+    }
     map['tanggal'] = Variable<DateTime>(tanggal);
     if (!nullToAbsent || catatan != null) {
       map['catatan'] = Variable<String>(catatan);
@@ -241,6 +271,9 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     return GajiTableCompanion(
       id: Value(id),
       jumlah: Value(jumlah),
+      jumlahBebas: jumlahBebas == null && nullToAbsent
+          ? const Value.absent()
+          : Value(jumlahBebas),
       tanggal: Value(tanggal),
       catatan: catatan == null && nullToAbsent
           ? const Value.absent()
@@ -259,6 +292,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     return GajiTableData(
       id: serializer.fromJson<String>(json['id']),
       jumlah: serializer.fromJson<double>(json['jumlah']),
+      jumlahBebas: serializer.fromJson<double?>(json['jumlahBebas']),
       tanggal: serializer.fromJson<DateTime>(json['tanggal']),
       catatan: serializer.fromJson<String?>(json['catatan']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -272,6 +306,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'jumlah': serializer.toJson<double>(jumlah),
+      'jumlahBebas': serializer.toJson<double?>(jumlahBebas),
       'tanggal': serializer.toJson<DateTime>(tanggal),
       'catatan': serializer.toJson<String?>(catatan),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -283,6 +318,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
   GajiTableData copyWith({
     String? id,
     double? jumlah,
+    Value<double?> jumlahBebas = const Value.absent(),
     DateTime? tanggal,
     Value<String?> catatan = const Value.absent(),
     DateTime? updatedAt,
@@ -291,6 +327,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
   }) => GajiTableData(
     id: id ?? this.id,
     jumlah: jumlah ?? this.jumlah,
+    jumlahBebas: jumlahBebas.present ? jumlahBebas.value : this.jumlahBebas,
     tanggal: tanggal ?? this.tanggal,
     catatan: catatan.present ? catatan.value : this.catatan,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -301,6 +338,9 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     return GajiTableData(
       id: data.id.present ? data.id.value : this.id,
       jumlah: data.jumlah.present ? data.jumlah.value : this.jumlah,
+      jumlahBebas: data.jumlahBebas.present
+          ? data.jumlahBebas.value
+          : this.jumlahBebas,
       tanggal: data.tanggal.present ? data.tanggal.value : this.tanggal,
       catatan: data.catatan.present ? data.catatan.value : this.catatan,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -314,6 +354,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
     return (StringBuffer('GajiTableData(')
           ..write('id: $id, ')
           ..write('jumlah: $jumlah, ')
+          ..write('jumlahBebas: $jumlahBebas, ')
           ..write('tanggal: $tanggal, ')
           ..write('catatan: $catatan, ')
           ..write('updatedAt: $updatedAt, ')
@@ -324,14 +365,23 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, jumlah, tanggal, catatan, updatedAt, isSynced, isDeleted);
+  int get hashCode => Object.hash(
+    id,
+    jumlah,
+    jumlahBebas,
+    tanggal,
+    catatan,
+    updatedAt,
+    isSynced,
+    isDeleted,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is GajiTableData &&
           other.id == this.id &&
           other.jumlah == this.jumlah &&
+          other.jumlahBebas == this.jumlahBebas &&
           other.tanggal == this.tanggal &&
           other.catatan == this.catatan &&
           other.updatedAt == this.updatedAt &&
@@ -342,6 +392,7 @@ class GajiTableData extends DataClass implements Insertable<GajiTableData> {
 class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
   final Value<String> id;
   final Value<double> jumlah;
+  final Value<double?> jumlahBebas;
   final Value<DateTime> tanggal;
   final Value<String?> catatan;
   final Value<DateTime> updatedAt;
@@ -351,6 +402,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
   const GajiTableCompanion({
     this.id = const Value.absent(),
     this.jumlah = const Value.absent(),
+    this.jumlahBebas = const Value.absent(),
     this.tanggal = const Value.absent(),
     this.catatan = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -361,6 +413,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
   GajiTableCompanion.insert({
     required String id,
     required double jumlah,
+    this.jumlahBebas = const Value.absent(),
     required DateTime tanggal,
     this.catatan = const Value.absent(),
     required DateTime updatedAt,
@@ -374,6 +427,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
   static Insertable<GajiTableData> custom({
     Expression<String>? id,
     Expression<double>? jumlah,
+    Expression<double>? jumlahBebas,
     Expression<DateTime>? tanggal,
     Expression<String>? catatan,
     Expression<DateTime>? updatedAt,
@@ -384,6 +438,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (jumlah != null) 'jumlah': jumlah,
+      if (jumlahBebas != null) 'jumlah_bebas': jumlahBebas,
       if (tanggal != null) 'tanggal': tanggal,
       if (catatan != null) 'catatan': catatan,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -396,6 +451,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
   GajiTableCompanion copyWith({
     Value<String>? id,
     Value<double>? jumlah,
+    Value<double?>? jumlahBebas,
     Value<DateTime>? tanggal,
     Value<String?>? catatan,
     Value<DateTime>? updatedAt,
@@ -406,6 +462,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
     return GajiTableCompanion(
       id: id ?? this.id,
       jumlah: jumlah ?? this.jumlah,
+      jumlahBebas: jumlahBebas ?? this.jumlahBebas,
       tanggal: tanggal ?? this.tanggal,
       catatan: catatan ?? this.catatan,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -423,6 +480,9 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
     }
     if (jumlah.present) {
       map['jumlah'] = Variable<double>(jumlah.value);
+    }
+    if (jumlahBebas.present) {
+      map['jumlah_bebas'] = Variable<double>(jumlahBebas.value);
     }
     if (tanggal.present) {
       map['tanggal'] = Variable<DateTime>(tanggal.value);
@@ -450,6 +510,7 @@ class GajiTableCompanion extends UpdateCompanion<GajiTableData> {
     return (StringBuffer('GajiTableCompanion(')
           ..write('id: $id, ')
           ..write('jumlah: $jumlah, ')
+          ..write('jumlahBebas: $jumlahBebas, ')
           ..write('tanggal: $tanggal, ')
           ..write('catatan: $catatan, ')
           ..write('updatedAt: $updatedAt, ')
@@ -2080,6 +2141,7 @@ typedef $$GajiTableTableCreateCompanionBuilder =
     GajiTableCompanion Function({
       required String id,
       required double jumlah,
+      Value<double?> jumlahBebas,
       required DateTime tanggal,
       Value<String?> catatan,
       required DateTime updatedAt,
@@ -2091,6 +2153,7 @@ typedef $$GajiTableTableUpdateCompanionBuilder =
     GajiTableCompanion Function({
       Value<String> id,
       Value<double> jumlah,
+      Value<double?> jumlahBebas,
       Value<DateTime> tanggal,
       Value<String?> catatan,
       Value<DateTime> updatedAt,
@@ -2115,6 +2178,11 @@ class $$GajiTableTableFilterComposer
 
   ColumnFilters<double> get jumlah => $composableBuilder(
     column: $table.jumlah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get jumlahBebas => $composableBuilder(
+    column: $table.jumlahBebas,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2163,6 +2231,11 @@ class $$GajiTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get jumlahBebas => $composableBuilder(
+    column: $table.jumlahBebas,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get tanggal => $composableBuilder(
     column: $table.tanggal,
     builder: (column) => ColumnOrderings(column),
@@ -2203,6 +2276,11 @@ class $$GajiTableTableAnnotationComposer
 
   GeneratedColumn<double> get jumlah =>
       $composableBuilder(column: $table.jumlah, builder: (column) => column);
+
+  GeneratedColumn<double> get jumlahBebas => $composableBuilder(
+    column: $table.jumlahBebas,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get tanggal =>
       $composableBuilder(column: $table.tanggal, builder: (column) => column);
@@ -2253,6 +2331,7 @@ class $$GajiTableTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<double> jumlah = const Value.absent(),
+                Value<double?> jumlahBebas = const Value.absent(),
                 Value<DateTime> tanggal = const Value.absent(),
                 Value<String?> catatan = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -2262,6 +2341,7 @@ class $$GajiTableTableTableManager
               }) => GajiTableCompanion(
                 id: id,
                 jumlah: jumlah,
+                jumlahBebas: jumlahBebas,
                 tanggal: tanggal,
                 catatan: catatan,
                 updatedAt: updatedAt,
@@ -2273,6 +2353,7 @@ class $$GajiTableTableTableManager
               ({
                 required String id,
                 required double jumlah,
+                Value<double?> jumlahBebas = const Value.absent(),
                 required DateTime tanggal,
                 Value<String?> catatan = const Value.absent(),
                 required DateTime updatedAt,
@@ -2282,6 +2363,7 @@ class $$GajiTableTableTableManager
               }) => GajiTableCompanion.insert(
                 id: id,
                 jumlah: jumlah,
+                jumlahBebas: jumlahBebas,
                 tanggal: tanggal,
                 catatan: catatan,
                 updatedAt: updatedAt,

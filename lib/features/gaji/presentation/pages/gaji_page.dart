@@ -29,6 +29,7 @@ class _GajiPageState extends State<GajiPage> {
     if (result != null && mounted) {
       context.read<GajiBloc>().add(GajiAddRequested(
             jumlah: result.jumlah,
+            jumlahBebas: result.jumlahBebas,
             tanggal: result.tanggal,
             catatan: result.catatan,
           ));
@@ -55,6 +56,7 @@ class _GajiPageState extends State<GajiPage> {
       context.read<GajiBloc>().add(GajiUpdateRequested(
             gaji.copyWith(
               jumlah: result.jumlah,
+              jumlahBebas: result.jumlahBebas,
               tanggal: result.tanggal,
               catatan: result.catatan,
             ),

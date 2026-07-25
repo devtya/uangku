@@ -27,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -35,6 +35,10 @@ class AppDatabase extends _$AppDatabase {
           // v2: tautkan entry cicilan ke utang terkait.
           if (from < 2) {
             await m.addColumn(pengeluaranTable, pengeluaranTable.utangId);
+          }
+          // v3: porsi gaji yang bebas dipakai (sisanya wajib disimpan).
+          if (from < 3) {
+            await m.addColumn(gajiTable, gajiTable.jumlahBebas);
           }
         },
       );

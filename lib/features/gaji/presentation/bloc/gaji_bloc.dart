@@ -53,6 +53,7 @@ class GajiBloc extends Bloc<GajiEvent, GajiState> {
     final gaji = GajiEntity(
       id: const Uuid().v4(),
       jumlah: event.jumlah,
+      jumlahBebas: event.jumlahBebas,
       tanggal: event.tanggal,
       catatan: event.catatan,
     );
