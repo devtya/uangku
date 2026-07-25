@@ -67,7 +67,7 @@ class BerandaPage extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             child: Row(
               children: [
                 Expanded(
@@ -109,10 +109,9 @@ class BerandaPage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 22),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
               children: [
                 _BalanceCard(
                   saldo: saldo,
