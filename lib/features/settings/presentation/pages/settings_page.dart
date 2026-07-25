@@ -101,7 +101,7 @@ class SettingsPage extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         title: Text('Pembaruan ${info!.version}'),
         content: SingleChildScrollView(
-          child: Text(info.notes.isEmpty ? 'Versi baru tersedia.' : info.notes),
+          child: Text(_prettyNotes(info.notes)),
         ),
         actions: [
           TextButton(
@@ -116,6 +116,20 @@ class SettingsPage extends StatelessWidget {
       ),
     );
     if (mulai == true && context.mounted) _startUpdate(context, info);
+  }
+
+  /// Bersihkan markdown release notes jadi teks rapi: buang baris judul (#),
+  /// ubah "- " jadi "• ", buang sisa tanda markdown inline.
+  String _prettyNotes(String raw) {
+    final lines = <String>[];
+    for (final line in raw.split('\n')) {
+      var s = line.trim();
+      if (s.isEmpty || s.startsWith('#')) continue;
+      s = s.replaceFirst(RegExp(r'^[-*]\s+'), '• ');
+      s = s.replaceAll(RegExp(r'[`*_]'), '');
+      lines.add(s);
+    }
+    return lines.isEmpty ? 'Versi baru tersedia.' : lines.join('\n');
   }
 
   void _startUpdate(BuildContext context, UpdateInfo info) {
