@@ -67,8 +67,10 @@ class BerandaPage extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Row(
+            padding: const EdgeInsets.fromLTRB(20, 14, 8, 0),
+            child: SizedBox(
+              height: 52,
+              child: Row(
               children: [
                 Expanded(
                   child: Column(
@@ -107,6 +109,7 @@ class BerandaPage extends StatelessWidget {
                   ),
                 ),
               ],
+              ),
             ),
           ),
           Expanded(

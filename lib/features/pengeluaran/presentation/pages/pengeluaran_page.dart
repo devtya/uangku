@@ -90,26 +90,29 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 12, 14),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Pengeluaran',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: context.colors.textPrimary,
+                padding: const EdgeInsets.fromLTRB(20, 14, 8, 0),
+                child: SizedBox(
+                  height: 52,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Pengeluaran',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: context.colors.textPrimary,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.tune_rounded,
-                          size: 20, color: context.colors.textMuted),
-                      tooltip: 'Kelola kategori',
-                      onPressed: () => showKelolaKategoriSheet(context),
-                    ),
-                  ],
+                      IconButton(
+                        icon: Icon(Icons.tune_rounded,
+                            size: 20, color: context.colors.textMuted),
+                        tooltip: 'Kelola kategori',
+                        onPressed: () => showKelolaKategoriSheet(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
