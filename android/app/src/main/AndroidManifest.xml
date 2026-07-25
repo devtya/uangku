@@ -3,7 +3,7 @@
     <!-- Untuk in-app update (memasang APK yang diunduh dari GitHub Releases). -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application
-        android:label="uangku"
+        android:label="Hencash"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

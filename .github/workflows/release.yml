@@ -54,6 +54,9 @@ jobs:
       - run: flutter pub get
       - run: flutter build apk --release
 
+      - name: Rename APK jadi hencash
+        run: cp build/app/outputs/flutter-apk/app-release.apk "hencash-${GITHUB_REF_NAME}.apk"
+
       - name: Susun changelog dari commit antar-tag
         id: changelog
         run: |
@@ -72,5 +75,5 @@ jobs:
       - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: hencash-${{ github.ref_name }}.apk
           body: ${{ steps.changelog.outputs.notes }}

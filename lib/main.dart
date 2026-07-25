@@ -50,7 +50,7 @@ class UangkuApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp(
-            title: 'Uangku',
+            title: 'Hencash',
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeMode,
