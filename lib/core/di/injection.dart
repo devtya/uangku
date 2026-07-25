@@ -22,6 +22,14 @@ import 'package:uangku/features/pengeluaran/domain/repositories/kategori_reposit
 import 'package:uangku/features/pengeluaran/domain/usecases/add_kategori.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/delete_kategori.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/watch_kategori_pengeluaran.dart';
+import 'package:uangku/features/pengeluaran/data/datasources/pengeluaran_local_datasource.dart';
+import 'package:uangku/features/pengeluaran/data/repositories/pengeluaran_repository_impl.dart';
+import 'package:uangku/features/pengeluaran/domain/repositories/pengeluaran_repository.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/add_pengeluaran.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/delete_pengeluaran.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/update_pengeluaran.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/watch_all_pengeluaran.dart';
+import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -78,6 +86,26 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => WatchKategoriPengeluaran(sl()));
   sl.registerLazySingleton(() => AddKategori(sl()));
   sl.registerLazySingleton(() => DeleteKategori(sl()));
+
+  sl.registerLazySingleton(() => PengeluaranLocalDataSource(sl()));
+
+  sl.registerLazySingleton<PengeluaranRepository>(
+    () => PengeluaranRepositoryImpl(sl()),
+  );
+
+  sl.registerLazySingleton(() => WatchAllPengeluaran(sl()));
+  sl.registerLazySingleton(() => AddPengeluaran(sl()));
+  sl.registerLazySingleton(() => UpdatePengeluaran(sl()));
+  sl.registerLazySingleton(() => DeletePengeluaran(sl()));
+
+  sl.registerFactory(
+    () => PengeluaranBloc(
+      watchAllPengeluaran: sl(),
+      addPengeluaran: sl(),
+      updatePengeluaran: sl(),
+      deletePengeluaran: sl(),
+    ),
+  );
 
   // Seed kategori default (jalan sekali kalau tabel masih kosong).
   await sl<KategoriLocalDataSource>().seedDefaultsIfEmpty();

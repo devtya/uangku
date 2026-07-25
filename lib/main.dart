@@ -9,6 +9,7 @@ import 'package:uangku/features/auth/presentation/bloc/auth_event.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_state.dart';
 import 'package:uangku/features/auth/presentation/pages/login_page.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_bloc.dart';
+import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_bloc.dart';
 import 'package:uangku/firebase_options.dart';
 import 'package:uangku/shared/widgets/main_shell.dart';
 
@@ -32,6 +33,9 @@ class UangkuApp extends StatelessWidget {
         ),
         BlocProvider<GajiBloc>(
           create: (_) => sl<GajiBloc>(),
+        ),
+        BlocProvider<PengeluaranBloc>(
+          create: (_) => sl<PengeluaranBloc>(),
         ),
       ],
       child: MaterialApp(
