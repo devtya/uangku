@@ -48,3 +48,8 @@ app.*.map.json
 android/app/google-services.json
 firebase.json
 lib/firebase_options.dart
+
+# Release signing (jangan pernah commit keystore / password)
+android/key.properties
+**/*.jks
+**/*.keystore

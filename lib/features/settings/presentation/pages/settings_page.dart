@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:uangku/core/di/injection.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/theme/app_theme.dart';
+import 'package:uangku/core/update/update_service.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_event.dart';
 
@@ -55,6 +58,106 @@ class SettingsPage extends StatelessWidget {
                 subtitle: Text(v),
               );
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.system_update_outlined),
+            title: const Text('Cek pembaruan'),
+            onTap: () => _checkUpdate(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _checkUpdate(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+    UpdateInfo? info;
+    String? error;
+    try {
+      info = await sl<UpdateService>().checkForUpdate();
+    } catch (e) {
+      error = 'Gagal memeriksa pembaruan';
+    }
+    if (!context.mounted) return;
+    Navigator.of(context).pop(); // tutup loading
+
+    if (error != null) {
+      messenger.showSnackBar(SnackBar(content: Text(error)));
+      return;
+    }
+    if (info == null) {
+      messenger.showSnackBar(
+          const SnackBar(content: Text('Sudah versi terbaru')));
+      return;
+    }
+
+    final mulai = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Pembaruan ${info!.version}'),
+        content: SingleChildScrollView(
+          child: Text(info.notes.isEmpty ? 'Versi baru tersedia.' : info.notes),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Nanti'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Perbarui'),
+          ),
+        ],
+      ),
+    );
+    if (mulai == true && context.mounted) _startUpdate(context, info);
+  }
+
+  void _startUpdate(BuildContext context, UpdateInfo info) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text('Mengunduh pembaruan'),
+        content: StreamBuilder<OtaEvent>(
+          stream: sl<UpdateService>().downloadAndInstall(info.apkUrl),
+          builder: (ctx, snap) {
+            final status = snap.data?.status;
+            if (status == OtaStatus.DOWNLOADING) {
+              final pct = int.tryParse(snap.data?.value ?? '') ?? 0;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LinearProgressIndicator(value: pct / 100),
+                  const SizedBox(height: 12),
+                  Text('$pct%'),
+                ],
+              );
+            }
+            if (status == OtaStatus.INSTALLING) {
+              return const Text('Membuka pemasang…');
+            }
+            if (status != null && status != OtaStatus.DOWNLOADING) {
+              // error mana pun
+              return const Text(
+                  'Gagal mengunduh/memasang. Pastikan izin "Pasang aplikasi '
+                  'tak dikenal" aktif, lalu coba lagi.');
+            }
+            return const SizedBox(
+              height: 40,
+              child: Center(child: CircularProgressIndicator()),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Tutup'),
           ),
         ],
       ),

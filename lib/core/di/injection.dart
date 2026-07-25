@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uangku/core/database/app_database.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/sync/sync_service.dart';
+import 'package:uangku/core/update/update_service.dart';
 import 'package:uangku/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:uangku/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:uangku/features/auth/domain/repositories/auth_repository.dart';
@@ -57,6 +58,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton(() => SyncService(sl(), sl(), sl()));
   sl.registerLazySingleton(() => ThemeCubit(sl()));
+  sl.registerLazySingleton(() => UpdateService());
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(firebaseAuth: sl(), googleSignIn: sl()),
