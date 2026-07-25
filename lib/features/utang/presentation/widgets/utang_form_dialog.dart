@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uangku/core/utils/rupiah_input_formatter.dart';
 import 'package:uangku/features/utang/domain/entities/utang_entity.dart';
 
 class UtangFormDialog extends StatefulWidget {
@@ -26,7 +27,7 @@ class _UtangFormDialogState extends State<UtangFormDialog> {
     _namaController = TextEditingController(text: widget.existing?.namaUtang ?? '');
     _totalController = TextEditingController(
       text: widget.existing != null
-          ? widget.existing!.jumlahTotal.toStringAsFixed(0)
+          ? formatRupiahDigits(widget.existing!.jumlahTotal.toStringAsFixed(0))
           : '',
     );
     _catatanController =
@@ -99,6 +100,7 @@ class _UtangFormDialogState extends State<UtangFormDialog> {
                 TextFormField(
                   controller: _totalController,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [RupiahInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Jumlah total',
                     prefixText: 'Rp ',

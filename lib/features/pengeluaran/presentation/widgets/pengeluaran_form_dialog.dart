@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uangku/core/di/injection.dart';
+import 'package:uangku/core/utils/rupiah_input_formatter.dart';
 import 'package:uangku/features/pengeluaran/domain/entities/kategori_entity.dart';
 import 'package:uangku/features/pengeluaran/domain/entities/pengeluaran_entity.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/add_kategori.dart';
@@ -34,7 +35,7 @@ class _PengeluaranFormDialogState extends State<PengeluaranFormDialog> {
     super.initState();
     _jumlahController = TextEditingController(
       text: widget.existing != null
-          ? widget.existing!.jumlah.toStringAsFixed(0)
+          ? formatRupiahDigits(widget.existing!.jumlah.toStringAsFixed(0))
           : '',
     );
     _catatanController = TextEditingController(
@@ -136,6 +137,7 @@ class _PengeluaranFormDialogState extends State<PengeluaranFormDialog> {
                 TextFormField(
                   controller: _jumlahController,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [RupiahInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Jumlah',
                     prefixText: 'Rp ',

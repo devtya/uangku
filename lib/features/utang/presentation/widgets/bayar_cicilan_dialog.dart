@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uangku/core/utils/rupiah_input_formatter.dart';
 import 'package:uangku/features/utang/domain/entities/utang_entity.dart';
 
 class BayarCicilanDialog extends StatefulWidget {
@@ -20,7 +21,7 @@ class _BayarCicilanDialogState extends State<BayarCicilanDialog> {
   void initState() {
     super.initState();
     // Default: sisa utang (bayar lunas sekaligus), tetap bisa diubah.
-    _jumlahText = widget.utang.sisaUtang.toStringAsFixed(0);
+    _jumlahText = formatRupiahDigits(widget.utang.sisaUtang.toStringAsFixed(0));
     _tanggal = DateTime.now();
   }
 
@@ -64,6 +65,7 @@ class _BayarCicilanDialogState extends State<BayarCicilanDialog> {
             TextFormField(
               initialValue: _jumlahText,
               keyboardType: TextInputType.number,
+              inputFormatters: [RupiahInputFormatter()],
               autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'Jumlah bayar',

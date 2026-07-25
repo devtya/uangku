@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uangku/core/theme/app_theme.dart';
+import 'package:uangku/core/utils/rupiah_input_formatter.dart';
 import 'package:uangku/features/gaji/domain/entities/gaji_entity.dart';
 
 class GajiFormDialog extends StatefulWidget {
@@ -26,12 +27,12 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
     super.initState();
     _jumlahController = TextEditingController(
       text: widget.existingGaji != null
-          ? widget.existingGaji!.jumlah.toStringAsFixed(0)
+          ? formatRupiahDigits(widget.existingGaji!.jumlah.toStringAsFixed(0))
           : '',
     );
     _bebasController = TextEditingController(
       text: widget.existingGaji != null
-          ? widget.existingGaji!.jumlahBebas.toStringAsFixed(0)
+          ? formatRupiahDigits(widget.existingGaji!.jumlahBebas.toStringAsFixed(0))
           : '',
     );
     _catatanController = TextEditingController(
@@ -123,6 +124,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
                 TextFormField(
                   controller: _jumlahController,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [RupiahInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Jumlah',
                     prefixText: 'Rp ',
@@ -143,6 +145,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
                 TextFormField(
                   controller: _bebasController,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [RupiahInputFormatter()],
                   decoration: const InputDecoration(
                     labelText: 'Bebas dipakai (opsional)',
                     prefixText: 'Rp ',
