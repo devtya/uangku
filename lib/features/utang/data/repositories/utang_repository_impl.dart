@@ -18,6 +18,12 @@ class UtangRepositoryImpl implements UtangRepository {
   }
 
   @override
+  Future<UtangEntity?> getUtangById(String id) async {
+    final model = await _localDataSource.getUtangById(id);
+    return model?.toEntity();
+  }
+
+  @override
   Future<Either<Failure, void>> addUtang(UtangEntity utang) async {
     try {
       await _localDataSource.addUtang(UtangModel.fromEntity(utang));

@@ -33,3 +33,9 @@ class UtangError extends UtangState {
   @override
   List<Object?> get props => [message];
 }
+
+/// Sinyal transien: pembayaran cicilan berhasil (untuk SnackBar).
+/// Dipakai lewat listener; builder mengabaikannya agar list tidak flicker.
+class UtangBayarSuccess extends UtangState {
+  const UtangBayarSuccess();
+}

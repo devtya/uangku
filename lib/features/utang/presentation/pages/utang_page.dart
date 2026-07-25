@@ -7,6 +7,7 @@ import 'package:uangku/features/utang/domain/entities/utang_entity.dart';
 import 'package:uangku/features/utang/presentation/bloc/utang_bloc.dart';
 import 'package:uangku/features/utang/presentation/bloc/utang_event.dart';
 import 'package:uangku/features/utang/presentation/bloc/utang_state.dart';
+import 'package:uangku/features/utang/presentation/widgets/bayar_cicilan_dialog.dart';
 import 'package:uangku/features/utang/presentation/widgets/utang_card.dart';
 import 'package:uangku/features/utang/presentation/widgets/utang_form_dialog.dart';
 
@@ -46,6 +47,17 @@ class _UtangPageState extends State<UtangPage> {
               jatuhTempo: result.jatuhTempo,
               catatan: result.catatan,
             ),
+          ));
+    }
+  }
+
+  Future<void> _showBayarDialog(UtangEntity utang) async {
+    final result = await showBayarCicilanDialog(context, utang: utang);
+    if (result != null && mounted) {
+      context.read<UtangBloc>().add(UtangBayarCicilanRequested(
+            utangId: utang.id,
+            jumlah: result.jumlah,
+            tanggal: result.tanggal,
           ));
     }
   }
@@ -112,8 +124,14 @@ class _UtangPageState extends State<UtangPage> {
                           backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                       );
+                    } else if (state is UtangBayarSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Pembayaran cicilan dicatat')),
+                      );
                     }
                   },
+                  // Abaikan sinyal transien agar list (UtangLoaded) tidak flicker.
+                  buildWhen: (_, current) => current is! UtangBayarSuccess,
                   builder: (context, state) {
                     if (state is UtangInitial || state is UtangLoading) {
                       return const Center(child: CircularProgressIndicator());
@@ -199,6 +217,7 @@ class _UtangPageState extends State<UtangPage> {
             (u) => UtangCard(
               utang: u,
               onTap: () => _showEditDialog(u),
+              onBayar: () => _showBayarDialog(u),
               onDelete: () async {
                 final confirmed = await _confirmDelete();
                 if (confirmed && mounted) {

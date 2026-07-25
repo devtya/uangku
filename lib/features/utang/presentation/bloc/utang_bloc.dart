@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:uangku/core/constants/app_constants.dart';
 import 'package:uangku/features/utang/domain/entities/utang_entity.dart';
 import 'package:uangku/features/utang/domain/usecases/add_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/bayar_cicilan_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/delete_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/update_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
@@ -15,6 +16,7 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
   final AddUtang _addUtang;
   final UpdateUtang _updateUtang;
   final DeleteUtang _deleteUtang;
+  final BayarCicilanUtang _bayarCicilanUtang;
   StreamSubscription<List<UtangEntity>>? _subscription;
 
   UtangBloc({
@@ -22,15 +24,18 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
     required AddUtang addUtang,
     required UpdateUtang updateUtang,
     required DeleteUtang deleteUtang,
+    required BayarCicilanUtang bayarCicilanUtang,
   })  : _watchAllUtang = watchAllUtang,
         _addUtang = addUtang,
         _updateUtang = updateUtang,
         _deleteUtang = deleteUtang,
+        _bayarCicilanUtang = bayarCicilanUtang,
         super(const UtangInitial()) {
     on<UtangWatchRequested>(_onWatchRequested);
     on<UtangAddRequested>(_onAddRequested);
     on<UtangUpdateRequested>(_onUpdateRequested);
     on<UtangDeleteRequested>(_onDeleteRequested);
+    on<UtangBayarCicilanRequested>(_onBayarCicilanRequested);
     on<_UtangListUpdated>(_onListUpdated);
     on<_UtangErrorOccurred>(_onErrorOccurred);
   }
@@ -86,6 +91,18 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
     result.fold(
       (failure) => emit(UtangError(failure.message)),
       (_) {},
+    );
+  }
+
+  void _onBayarCicilanRequested(
+    UtangBayarCicilanRequested event,
+    Emitter<UtangState> emit,
+  ) async {
+    final result =
+        await _bayarCicilanUtang(event.utangId, event.jumlah, event.tanggal);
+    result.fold(
+      (failure) => emit(UtangError(failure.message)),
+      (_) => emit(const UtangBayarSuccess()),
     );
   }
 

@@ -46,3 +46,18 @@ class UtangDeleteRequested extends UtangEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class UtangBayarCicilanRequested extends UtangEvent {
+  final String utangId;
+  final double jumlah;
+  final DateTime tanggal;
+
+  const UtangBayarCicilanRequested({
+    required this.utangId,
+    required this.jumlah,
+    required this.tanggal,
+  });
+
+  @override
+  List<Object?> get props => [utangId, jumlah, tanggal];
+}

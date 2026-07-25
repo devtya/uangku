@@ -35,4 +35,8 @@ class KategoriRepositoryImpl implements KategoriRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<String?> getKategoriIdByNama(String nama) =>
+      _localDataSource.getKategoriIdByNama(nama);
 }

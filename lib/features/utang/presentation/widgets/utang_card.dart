@@ -8,12 +8,14 @@ class UtangCard extends StatelessWidget {
   final UtangEntity utang;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final VoidCallback? onBayar;
 
   const UtangCard({
     super.key,
     required this.utang,
     required this.onTap,
     required this.onDelete,
+    this.onBayar,
   });
 
   @override
@@ -108,6 +110,20 @@ class UtangCard extends StatelessWidget {
               const SizedBox(height: 6),
               _jatuhTempoRow(lunas),
             ],
+            if (!lunas && onBayar != null)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: onBayar,
+                  icon: const Icon(Icons.payments_outlined, size: 16),
+                  label: const Text('Bayar cicilan'),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: const Size(0, 32),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

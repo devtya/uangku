@@ -32,6 +32,14 @@ class UtangLocalDataSource {
     return aDue.compareTo(bDue);
   }
 
+  Future<UtangModel?> getUtangById(String id) async {
+    final row = await (_db.select(_db.utangTable)
+          ..where((t) => t.id.equals(id))
+          ..limit(1))
+        .getSingleOrNull();
+    return row == null ? null : UtangModel.fromDrift(row);
+  }
+
   Future<void> addUtang(UtangModel model) async {
     await _db.into(_db.utangTable).insert(model.toCompanion());
   }

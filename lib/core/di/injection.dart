@@ -33,7 +33,9 @@ import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_bloc.d
 import 'package:uangku/features/utang/data/datasources/utang_local_datasource.dart';
 import 'package:uangku/features/utang/data/repositories/utang_repository_impl.dart';
 import 'package:uangku/features/utang/domain/repositories/utang_repository.dart';
+import 'package:uangku/core/constants/app_constants.dart';
 import 'package:uangku/features/utang/domain/usecases/add_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/bayar_cicilan_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/delete_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/update_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
@@ -126,15 +128,22 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => UpdateUtang(sl()));
   sl.registerLazySingleton(() => DeleteUtang(sl()));
 
+  // Orkestrasi lintas-fitur: inject Utang + Pengeluaran + Kategori repository.
+  sl.registerLazySingleton(() => BayarCicilanUtang(sl(), sl(), sl()));
+
   sl.registerFactory(
     () => UtangBloc(
       watchAllUtang: sl(),
       addUtang: sl(),
       updateUtang: sl(),
       deleteUtang: sl(),
+      bayarCicilanUtang: sl(),
     ),
   );
 
-  // Seed kategori default (jalan sekali kalau tabel masih kosong).
+  // Seed kategori default (jalan sekali kalau tabel masih kosong)...
   await sl<KategoriLocalDataSource>().seedDefaultsIfEmpty();
+  // ...lalu pastikan kategori sistem 'Cicilan/Utang' selalu ada (idempotent),
+  // termasuk untuk instalasi lama yang tabelnya sudah terisi.
+  await sl<KategoriLocalDataSource>().ensureKategori(kKategoriCicilanUtang);
 }

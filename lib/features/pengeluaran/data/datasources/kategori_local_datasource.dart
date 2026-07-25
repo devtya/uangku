@@ -38,6 +38,24 @@ class KategoriLocalDataSource {
         );
   }
 
+  Future<String?> getKategoriIdByNama(String nama) async {
+    final row = await (_db.select(_db.kategoriTable)
+          ..where((t) =>
+              t.nama.equals(nama) &
+              t.tipe.equals('pengeluaran') &
+              t.isDeleted.equals(false))
+          ..limit(1))
+        .getSingleOrNull();
+    return row?.id;
+  }
+
+  /// Pastikan sebuah kategori pengeluaran ada (idempotent, tanpa duplikat).
+  Future<void> ensureKategori(String nama) async {
+    final existing = await getKategoriIdByNama(nama);
+    if (existing != null) return;
+    await addKategori(nama);
+  }
+
   Future<void> deleteKategori(String id) async {
     await (_db.update(_db.kategoriTable)..where((t) => t.id.equals(id))).write(
       KategoriTableCompanion(

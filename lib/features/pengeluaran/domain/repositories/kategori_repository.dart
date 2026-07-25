@@ -6,4 +6,7 @@ abstract class KategoriRepository {
   Stream<List<KategoriEntity>> watchKategoriPengeluaran();
   Future<Either<Failure, void>> addKategori(String nama);
   Future<Either<Failure, void>> deleteKategori(String id);
+
+  /// Cari id kategori pengeluaran berdasarkan nama (null kalau tidak ada).
+  Future<String?> getKategoriIdByNama(String nama);
 }
