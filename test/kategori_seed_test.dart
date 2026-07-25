@@ -39,4 +39,15 @@ void main() {
     final after = await ds.watchKategoriPengeluaran().first;
     expect(after.length, 6);
   });
+
+  test('rename: nama kategori berubah, jumlah tetap', () async {
+    await ds.seedDefaultsIfEmpty();
+    final before = await ds.watchKategoriPengeluaran().first;
+    final target = before.firstWhere((k) => k.nama == 'Makan');
+    await ds.updateKategori(target.id, 'Makanan & Minuman');
+    final after = await ds.watchKategoriPengeluaran().first;
+    expect(after.length, 7);
+    expect(after.any((k) => k.nama == 'Makanan & Minuman'), isTrue);
+    expect(after.any((k) => k.nama == 'Makan'), isFalse);
+  });
 }

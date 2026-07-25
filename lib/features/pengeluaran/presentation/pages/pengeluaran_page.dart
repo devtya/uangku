@@ -9,6 +9,7 @@ import 'package:uangku/features/pengeluaran/domain/usecases/watch_kategori_penge
 import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_bloc.dart';
 import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_event.dart';
 import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_state.dart';
+import 'package:uangku/features/pengeluaran/presentation/widgets/kelola_kategori_sheet.dart';
 import 'package:uangku/features/pengeluaran/presentation/widgets/pengeluaran_card.dart';
 import 'package:uangku/features/pengeluaran/presentation/widgets/pengeluaran_form_dialog.dart';
 
@@ -88,11 +89,11 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
         children: [
           Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 14, 12, 14),
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'Pengeluaran',
                         style: TextStyle(
@@ -101,6 +102,12 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                           color: AppColors.textPrimary,
                         ),
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.tune_rounded,
+                          size: 20, color: AppColors.textMuted),
+                      tooltip: 'Kelola kategori',
+                      onPressed: () => showKelolaKategoriSheet(context),
                     ),
                   ],
                 ),

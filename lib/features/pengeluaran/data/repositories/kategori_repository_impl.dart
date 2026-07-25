@@ -27,6 +27,16 @@ class KategoriRepositoryImpl implements KategoriRepository {
   }
 
   @override
+  Future<Either<Failure, void>> updateKategori(String id, String nama) async {
+    try {
+      await _localDataSource.updateKategori(id, nama);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteKategori(String id) async {
     try {
       await _localDataSource.deleteKategori(id);

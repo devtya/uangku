@@ -56,6 +56,16 @@ class KategoriLocalDataSource {
     await addKategori(nama);
   }
 
+  Future<void> updateKategori(String id, String nama) async {
+    await (_db.update(_db.kategoriTable)..where((t) => t.id.equals(id))).write(
+      KategoriTableCompanion(
+        nama: Value(nama),
+        updatedAt: Value(DateTime.now()),
+        isSynced: const Value(false),
+      ),
+    );
+  }
+
   Future<void> deleteKategori(String id) async {
     await (_db.update(_db.kategoriTable)..where((t) => t.id.equals(id))).write(
       KategoriTableCompanion(

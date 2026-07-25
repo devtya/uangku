@@ -24,6 +24,7 @@ import 'package:uangku/features/pengeluaran/data/repositories/kategori_repositor
 import 'package:uangku/features/pengeluaran/domain/repositories/kategori_repository.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/add_kategori.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/delete_kategori.dart';
+import 'package:uangku/features/pengeluaran/domain/usecases/update_kategori.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/watch_kategori_pengeluaran.dart';
 import 'package:uangku/features/pengeluaran/data/datasources/pengeluaran_local_datasource.dart';
 import 'package:uangku/features/pengeluaran/data/repositories/pengeluaran_repository_impl.dart';
@@ -102,6 +103,7 @@ Future<void> initDependencies() async {
 
   sl.registerLazySingleton(() => WatchKategoriPengeluaran(sl()));
   sl.registerLazySingleton(() => AddKategori(sl()));
+  sl.registerLazySingleton(() => UpdateKategori(sl()));
   sl.registerLazySingleton(() => DeleteKategori(sl()));
 
   sl.registerLazySingleton(() => PengeluaranLocalDataSource(sl()));
