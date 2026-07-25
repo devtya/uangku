@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uangku/core/database/app_database.dart';
+import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:uangku/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:uangku/features/auth/domain/repositories/auth_repository.dart';
@@ -48,6 +51,9 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => GoogleSignIn());
   sl.registerLazySingleton(() => AppDatabase());
+  sl.registerLazySingleton(() => FirebaseFirestore.instance);
+  sl.registerLazySingleton(() => Connectivity());
+  sl.registerLazySingleton(() => SyncService(sl(), sl(), sl()));
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(firebaseAuth: sl(), googleSignIn: sl()),

@@ -9,6 +9,7 @@ import 'tables/gaji_table.dart';
 import 'tables/pengeluaran_table.dart';
 import 'tables/utang_table.dart';
 import 'tables/kategori_table.dart';
+import 'tables/sync_meta_table.dart';
 
 part 'app_database.g.dart';
 
@@ -18,6 +19,7 @@ part 'app_database.g.dart';
     PengeluaranTable,
     UtangTable,
     KategoriTable,
+    SyncMetaTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -27,7 +29,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -39,6 +41,10 @@ class AppDatabase extends _$AppDatabase {
           // v3: porsi gaji yang bebas dipakai (sisanya wajib disimpan).
           if (from < 3) {
             await m.addColumn(gajiTable, gajiTable.jumlahBebas);
+          }
+          // v4: metadata sync (lastUid untuk deteksi ganti akun).
+          if (from < 4) {
+            await m.createTable(syncMetaTable);
           }
         },
       );

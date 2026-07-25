@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:uangku/core/di/injection.dart';
+import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_event.dart';
@@ -67,7 +68,15 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        final sync = sl<SyncService>();
+        if (state is AuthAuthenticated) {
+          sync.handleLogin(state.user.uid);
+        } else if (state is AuthUnauthenticated) {
+          sync.handleLogout();
+        }
+      },
       builder: (context, state) {
         if (state is AuthAuthenticated) {
           return const MainShell();
