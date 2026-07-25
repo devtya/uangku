@@ -10,6 +10,7 @@ import 'tables/pengeluaran_table.dart';
 import 'tables/utang_table.dart';
 import 'tables/kategori_table.dart';
 import 'tables/sync_meta_table.dart';
+import 'tables/recurring_table.dart';
 
 part 'app_database.g.dart';
 
@@ -20,6 +21,7 @@ part 'app_database.g.dart';
     UtangTable,
     KategoriTable,
     SyncMetaTable,
+    RecurringTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -29,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -52,6 +54,10 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(utangTable, utangTable.tenor);
             await m.addColumn(utangTable, utangTable.bungaPersen);
             await m.addColumn(utangTable, utangTable.tanggalMulai);
+          }
+          // v6: transaksi berulang.
+          if (from < 6) {
+            await m.createTable(recurringTable);
           }
         },
       );

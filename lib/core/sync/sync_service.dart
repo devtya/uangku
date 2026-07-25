@@ -132,6 +132,17 @@ class SyncService {
       (ids) => (_db.update(_db.kategoriTable)..where((t) => t.id.isIn(ids)))
           .write(const KategoriTableCompanion(isSynced: Value(true))),
     );
+    await _pushCollection<RecurringTableData>(
+      uid,
+      'recurring',
+      () => (_db.select(_db.recurringTable)
+            ..where((t) => t.isSynced.equals(false)))
+          .get(),
+      (r) => r.id,
+      _recurringToMap,
+      (ids) => (_db.update(_db.recurringTable)..where((t) => t.id.isIn(ids)))
+          .write(const RecurringTableCompanion(isSynced: Value(true))),
+    );
   }
 
   Future<void> _pushCollection<D>(
@@ -160,6 +171,7 @@ class SyncService {
     await _pullCollection(uid, 'pengeluaran', _upsertPengeluaran);
     await _pullCollection(uid, 'utang', _upsertUtang);
     await _pullCollection(uid, 'kategori', _upsertKategori);
+    await _pullCollection(uid, 'recurring', _upsertRecurring);
   }
 
   Future<void> _pullCollection(
@@ -246,6 +258,37 @@ class SyncService {
         ));
   }
 
+  Future<void> _upsertRecurring(Map<String, dynamic> d) async {
+    final id = d['id'] as String;
+    final remote = _ms(d['updatedAt']);
+    final local = await (_db.select(_db.recurringTable)
+          ..where((t) => t.id.equals(id))
+          ..limit(1))
+        .getSingleOrNull();
+    if (!shouldApplyRemote(local?.updatedAt, remote)) return;
+    await _db.into(_db.recurringTable).insertOnConflictUpdate(
+          RecurringTableCompanion(
+            id: Value(id),
+            tipe: Value(d['tipe'] as String),
+            nominal: Value((d['nominal'] as num).toDouble()),
+            nominalBebas: Value((d['nominalBebas'] as num?)?.toDouble()),
+            frekuensi: Value(d['frekuensi'] as String),
+            tanggalMulai: Value(_ms(d['tanggalMulai'])),
+            tanggalAkhir: Value(
+                d['tanggalAkhir'] == null ? null : _ms(d['tanggalAkhir'])),
+            terakhirDibuat: Value(
+                d['terakhirDibuat'] == null ? null : _ms(d['terakhirDibuat'])),
+            sumber: Value(d['sumber'] as String?),
+            kategoriId: Value(d['kategoriId'] as String?),
+            catatan: Value(d['catatan'] as String?),
+            aktif: Value(d['aktif'] as bool? ?? true),
+            updatedAt: Value(remote),
+            isSynced: const Value(true),
+            isDeleted: Value(d['isDeleted'] as bool? ?? false),
+          ),
+        );
+  }
+
   Future<void> _upsertKategori(Map<String, dynamic> d) async {
     final id = d['id'] as String;
     final remote = _ms(d['updatedAt']);
@@ -302,6 +345,23 @@ class SyncService {
         'tenor': r.tenor,
         'bungaPersen': r.bungaPersen,
         'tanggalMulai': r.tanggalMulai?.millisecondsSinceEpoch,
+        'updatedAt': r.updatedAt.millisecondsSinceEpoch,
+        'isDeleted': r.isDeleted,
+      };
+
+  Map<String, dynamic> _recurringToMap(RecurringTableData r) => {
+        'id': r.id,
+        'tipe': r.tipe,
+        'nominal': r.nominal,
+        'nominalBebas': r.nominalBebas,
+        'frekuensi': r.frekuensi,
+        'tanggalMulai': r.tanggalMulai.millisecondsSinceEpoch,
+        'tanggalAkhir': r.tanggalAkhir?.millisecondsSinceEpoch,
+        'terakhirDibuat': r.terakhirDibuat?.millisecondsSinceEpoch,
+        'sumber': r.sumber,
+        'kategoriId': r.kategoriId,
+        'catatan': r.catatan,
+        'aktif': r.aktif,
         'updatedAt': r.updatedAt.millisecondsSinceEpoch,
         'isDeleted': r.isDeleted,
       };

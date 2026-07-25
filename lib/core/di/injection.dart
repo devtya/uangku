@@ -47,6 +47,14 @@ import 'package:uangku/features/utang/domain/usecases/delete_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/update_utang.dart';
 import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
 import 'package:uangku/features/utang/presentation/bloc/utang_bloc.dart';
+import 'package:uangku/features/recurring/data/datasources/recurring_local_datasource.dart';
+import 'package:uangku/features/recurring/data/repositories/recurring_repository_impl.dart';
+import 'package:uangku/features/recurring/domain/repositories/recurring_repository.dart';
+import 'package:uangku/features/recurring/domain/usecases/add_recurring.dart';
+import 'package:uangku/features/recurring/domain/usecases/delete_recurring.dart';
+import 'package:uangku/features/recurring/domain/usecases/generate_due_recurring.dart';
+import 'package:uangku/features/recurring/domain/usecases/update_recurring.dart';
+import 'package:uangku/features/recurring/domain/usecases/watch_recurring.dart';
 
 final sl = GetIt.instance;
 
@@ -155,6 +163,16 @@ Future<void> initDependencies() async {
     ),
   );
 
+  sl.registerLazySingleton(() => RecurringLocalDataSource(sl()));
+  sl.registerLazySingleton<RecurringRepository>(
+    () => RecurringRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton(() => WatchRecurring(sl()));
+  sl.registerLazySingleton(() => AddRecurring(sl()));
+  sl.registerLazySingleton(() => UpdateRecurring(sl()));
+  sl.registerLazySingleton(() => DeleteRecurring(sl()));
+  sl.registerLazySingleton(() => GenerateDueRecurring(sl(), sl(), sl()));
+
   // Seed kategori default (jalan sekali kalau tabel masih kosong)...
   await sl<KategoriLocalDataSource>().seedDefaultsIfEmpty();
   // ...lalu pastikan kategori sistem 'Cicilan/Utang' selalu ada (idempotent),
@@ -163,4 +181,9 @@ Future<void> initDependencies() async {
 
   // Muat preferensi tema tersimpan sebelum app dibangun.
   await sl<ThemeCubit>().load();
+
+  // Generate transaksi berulang yang terlewat (catch-up saat app dibuka).
+  try {
+    await sl<GenerateDueRecurring>()();
+  } catch (_) {}
 }

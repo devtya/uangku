@@ -8,6 +8,7 @@ import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/core/update/update_service.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_event.dart';
+import 'package:uangku/features/recurring/presentation/pages/recurring_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -33,6 +34,17 @@ class SettingsPage extends StatelessWidget {
                 ],
               );
             },
+          ),
+          const Divider(height: 24),
+          _sectionLabel(context, 'Otomatis'),
+          ListTile(
+            leading: const Icon(Icons.repeat_rounded),
+            title: const Text('Transaksi berulang'),
+            subtitle: const Text('Pendapatan/pengeluaran otomatis terjadwal'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const RecurringPage()),
+            ),
           ),
           const Divider(height: 24),
           _sectionLabel(context, 'Akun'),

@@ -17,3 +17,17 @@ class UtangJenis {
   static const bulat = 'bulat'; // bayar bebas, bukan cicilan terjadwal
   static const cicilan = 'cicilan'; // tenor + bunga, jadwal per bulan
 }
+
+/// Transaksi berulang.
+class RecurringTipe {
+  const RecurringTipe._();
+  static const pendapatan = 'pendapatan';
+  static const pengeluaran = 'pengeluaran';
+}
+
+class RecurringFrekuensi {
+  const RecurringFrekuensi._();
+  static const harian = 'harian';
+  static const mingguan = 'mingguan';
+  static const bulanan = 'bulanan';
+}

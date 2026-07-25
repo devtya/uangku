@@ -2527,6 +2527,883 @@ class SyncMetaTableCompanion extends UpdateCompanion<SyncMetaTableData> {
   }
 }
 
+class $RecurringTableTable extends RecurringTable
+    with TableInfo<$RecurringTableTable, RecurringTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RecurringTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tipeMeta = const VerificationMeta('tipe');
+  @override
+  late final GeneratedColumn<String> tipe = GeneratedColumn<String>(
+    'tipe',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nominalMeta = const VerificationMeta(
+    'nominal',
+  );
+  @override
+  late final GeneratedColumn<double> nominal = GeneratedColumn<double>(
+    'nominal',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nominalBebasMeta = const VerificationMeta(
+    'nominalBebas',
+  );
+  @override
+  late final GeneratedColumn<double> nominalBebas = GeneratedColumn<double>(
+    'nominal_bebas',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _frekuensiMeta = const VerificationMeta(
+    'frekuensi',
+  );
+  @override
+  late final GeneratedColumn<String> frekuensi = GeneratedColumn<String>(
+    'frekuensi',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tanggalMulaiMeta = const VerificationMeta(
+    'tanggalMulai',
+  );
+  @override
+  late final GeneratedColumn<DateTime> tanggalMulai = GeneratedColumn<DateTime>(
+    'tanggal_mulai',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tanggalAkhirMeta = const VerificationMeta(
+    'tanggalAkhir',
+  );
+  @override
+  late final GeneratedColumn<DateTime> tanggalAkhir = GeneratedColumn<DateTime>(
+    'tanggal_akhir',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _terakhirDibuatMeta = const VerificationMeta(
+    'terakhirDibuat',
+  );
+  @override
+  late final GeneratedColumn<DateTime> terakhirDibuat =
+      GeneratedColumn<DateTime>(
+        'terakhir_dibuat',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _sumberMeta = const VerificationMeta('sumber');
+  @override
+  late final GeneratedColumn<String> sumber = GeneratedColumn<String>(
+    'sumber',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _kategoriIdMeta = const VerificationMeta(
+    'kategoriId',
+  );
+  @override
+  late final GeneratedColumn<String> kategoriId = GeneratedColumn<String>(
+    'kategori_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _catatanMeta = const VerificationMeta(
+    'catatan',
+  );
+  @override
+  late final GeneratedColumn<String> catatan = GeneratedColumn<String>(
+    'catatan',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _aktifMeta = const VerificationMeta('aktif');
+  @override
+  late final GeneratedColumn<bool> aktif = GeneratedColumn<bool>(
+    'aktif',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("aktif" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isSyncedMeta = const VerificationMeta(
+    'isSynced',
+  );
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+    'is_synced',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_synced" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    tipe,
+    nominal,
+    nominalBebas,
+    frekuensi,
+    tanggalMulai,
+    tanggalAkhir,
+    terakhirDibuat,
+    sumber,
+    kategoriId,
+    catatan,
+    aktif,
+    updatedAt,
+    isSynced,
+    isDeleted,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'recurring_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RecurringTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('tipe')) {
+      context.handle(
+        _tipeMeta,
+        tipe.isAcceptableOrUnknown(data['tipe']!, _tipeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_tipeMeta);
+    }
+    if (data.containsKey('nominal')) {
+      context.handle(
+        _nominalMeta,
+        nominal.isAcceptableOrUnknown(data['nominal']!, _nominalMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nominalMeta);
+    }
+    if (data.containsKey('nominal_bebas')) {
+      context.handle(
+        _nominalBebasMeta,
+        nominalBebas.isAcceptableOrUnknown(
+          data['nominal_bebas']!,
+          _nominalBebasMeta,
+        ),
+      );
+    }
+    if (data.containsKey('frekuensi')) {
+      context.handle(
+        _frekuensiMeta,
+        frekuensi.isAcceptableOrUnknown(data['frekuensi']!, _frekuensiMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_frekuensiMeta);
+    }
+    if (data.containsKey('tanggal_mulai')) {
+      context.handle(
+        _tanggalMulaiMeta,
+        tanggalMulai.isAcceptableOrUnknown(
+          data['tanggal_mulai']!,
+          _tanggalMulaiMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_tanggalMulaiMeta);
+    }
+    if (data.containsKey('tanggal_akhir')) {
+      context.handle(
+        _tanggalAkhirMeta,
+        tanggalAkhir.isAcceptableOrUnknown(
+          data['tanggal_akhir']!,
+          _tanggalAkhirMeta,
+        ),
+      );
+    }
+    if (data.containsKey('terakhir_dibuat')) {
+      context.handle(
+        _terakhirDibuatMeta,
+        terakhirDibuat.isAcceptableOrUnknown(
+          data['terakhir_dibuat']!,
+          _terakhirDibuatMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sumber')) {
+      context.handle(
+        _sumberMeta,
+        sumber.isAcceptableOrUnknown(data['sumber']!, _sumberMeta),
+      );
+    }
+    if (data.containsKey('kategori_id')) {
+      context.handle(
+        _kategoriIdMeta,
+        kategoriId.isAcceptableOrUnknown(data['kategori_id']!, _kategoriIdMeta),
+      );
+    }
+    if (data.containsKey('catatan')) {
+      context.handle(
+        _catatanMeta,
+        catatan.isAcceptableOrUnknown(data['catatan']!, _catatanMeta),
+      );
+    }
+    if (data.containsKey('aktif')) {
+      context.handle(
+        _aktifMeta,
+        aktif.isAcceptableOrUnknown(data['aktif']!, _aktifMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('is_synced')) {
+      context.handle(
+        _isSyncedMeta,
+        isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RecurringTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RecurringTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      tipe: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tipe'],
+      )!,
+      nominal: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}nominal'],
+      )!,
+      nominalBebas: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}nominal_bebas'],
+      ),
+      frekuensi: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}frekuensi'],
+      )!,
+      tanggalMulai: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}tanggal_mulai'],
+      )!,
+      tanggalAkhir: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}tanggal_akhir'],
+      ),
+      terakhirDibuat: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}terakhir_dibuat'],
+      ),
+      sumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sumber'],
+      ),
+      kategoriId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kategori_id'],
+      ),
+      catatan: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}catatan'],
+      ),
+      aktif: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}aktif'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      isSynced: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_synced'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+    );
+  }
+
+  @override
+  $RecurringTableTable createAlias(String alias) {
+    return $RecurringTableTable(attachedDatabase, alias);
+  }
+}
+
+class RecurringTableData extends DataClass
+    implements Insertable<RecurringTableData> {
+  final String id;
+  final String tipe;
+  final double nominal;
+  final double? nominalBebas;
+  final String frekuensi;
+  final DateTime tanggalMulai;
+  final DateTime? tanggalAkhir;
+  final DateTime? terakhirDibuat;
+  final String? sumber;
+  final String? kategoriId;
+  final String? catatan;
+  final bool aktif;
+  final DateTime updatedAt;
+  final bool isSynced;
+  final bool isDeleted;
+  const RecurringTableData({
+    required this.id,
+    required this.tipe,
+    required this.nominal,
+    this.nominalBebas,
+    required this.frekuensi,
+    required this.tanggalMulai,
+    this.tanggalAkhir,
+    this.terakhirDibuat,
+    this.sumber,
+    this.kategoriId,
+    this.catatan,
+    required this.aktif,
+    required this.updatedAt,
+    required this.isSynced,
+    required this.isDeleted,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['tipe'] = Variable<String>(tipe);
+    map['nominal'] = Variable<double>(nominal);
+    if (!nullToAbsent || nominalBebas != null) {
+      map['nominal_bebas'] = Variable<double>(nominalBebas);
+    }
+    map['frekuensi'] = Variable<String>(frekuensi);
+    map['tanggal_mulai'] = Variable<DateTime>(tanggalMulai);
+    if (!nullToAbsent || tanggalAkhir != null) {
+      map['tanggal_akhir'] = Variable<DateTime>(tanggalAkhir);
+    }
+    if (!nullToAbsent || terakhirDibuat != null) {
+      map['terakhir_dibuat'] = Variable<DateTime>(terakhirDibuat);
+    }
+    if (!nullToAbsent || sumber != null) {
+      map['sumber'] = Variable<String>(sumber);
+    }
+    if (!nullToAbsent || kategoriId != null) {
+      map['kategori_id'] = Variable<String>(kategoriId);
+    }
+    if (!nullToAbsent || catatan != null) {
+      map['catatan'] = Variable<String>(catatan);
+    }
+    map['aktif'] = Variable<bool>(aktif);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_synced'] = Variable<bool>(isSynced);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    return map;
+  }
+
+  RecurringTableCompanion toCompanion(bool nullToAbsent) {
+    return RecurringTableCompanion(
+      id: Value(id),
+      tipe: Value(tipe),
+      nominal: Value(nominal),
+      nominalBebas: nominalBebas == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nominalBebas),
+      frekuensi: Value(frekuensi),
+      tanggalMulai: Value(tanggalMulai),
+      tanggalAkhir: tanggalAkhir == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tanggalAkhir),
+      terakhirDibuat: terakhirDibuat == null && nullToAbsent
+          ? const Value.absent()
+          : Value(terakhirDibuat),
+      sumber: sumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sumber),
+      kategoriId: kategoriId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(kategoriId),
+      catatan: catatan == null && nullToAbsent
+          ? const Value.absent()
+          : Value(catatan),
+      aktif: Value(aktif),
+      updatedAt: Value(updatedAt),
+      isSynced: Value(isSynced),
+      isDeleted: Value(isDeleted),
+    );
+  }
+
+  factory RecurringTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RecurringTableData(
+      id: serializer.fromJson<String>(json['id']),
+      tipe: serializer.fromJson<String>(json['tipe']),
+      nominal: serializer.fromJson<double>(json['nominal']),
+      nominalBebas: serializer.fromJson<double?>(json['nominalBebas']),
+      frekuensi: serializer.fromJson<String>(json['frekuensi']),
+      tanggalMulai: serializer.fromJson<DateTime>(json['tanggalMulai']),
+      tanggalAkhir: serializer.fromJson<DateTime?>(json['tanggalAkhir']),
+      terakhirDibuat: serializer.fromJson<DateTime?>(json['terakhirDibuat']),
+      sumber: serializer.fromJson<String?>(json['sumber']),
+      kategoriId: serializer.fromJson<String?>(json['kategoriId']),
+      catatan: serializer.fromJson<String?>(json['catatan']),
+      aktif: serializer.fromJson<bool>(json['aktif']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'tipe': serializer.toJson<String>(tipe),
+      'nominal': serializer.toJson<double>(nominal),
+      'nominalBebas': serializer.toJson<double?>(nominalBebas),
+      'frekuensi': serializer.toJson<String>(frekuensi),
+      'tanggalMulai': serializer.toJson<DateTime>(tanggalMulai),
+      'tanggalAkhir': serializer.toJson<DateTime?>(tanggalAkhir),
+      'terakhirDibuat': serializer.toJson<DateTime?>(terakhirDibuat),
+      'sumber': serializer.toJson<String?>(sumber),
+      'kategoriId': serializer.toJson<String?>(kategoriId),
+      'catatan': serializer.toJson<String?>(catatan),
+      'aktif': serializer.toJson<bool>(aktif),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isSynced': serializer.toJson<bool>(isSynced),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+    };
+  }
+
+  RecurringTableData copyWith({
+    String? id,
+    String? tipe,
+    double? nominal,
+    Value<double?> nominalBebas = const Value.absent(),
+    String? frekuensi,
+    DateTime? tanggalMulai,
+    Value<DateTime?> tanggalAkhir = const Value.absent(),
+    Value<DateTime?> terakhirDibuat = const Value.absent(),
+    Value<String?> sumber = const Value.absent(),
+    Value<String?> kategoriId = const Value.absent(),
+    Value<String?> catatan = const Value.absent(),
+    bool? aktif,
+    DateTime? updatedAt,
+    bool? isSynced,
+    bool? isDeleted,
+  }) => RecurringTableData(
+    id: id ?? this.id,
+    tipe: tipe ?? this.tipe,
+    nominal: nominal ?? this.nominal,
+    nominalBebas: nominalBebas.present ? nominalBebas.value : this.nominalBebas,
+    frekuensi: frekuensi ?? this.frekuensi,
+    tanggalMulai: tanggalMulai ?? this.tanggalMulai,
+    tanggalAkhir: tanggalAkhir.present ? tanggalAkhir.value : this.tanggalAkhir,
+    terakhirDibuat: terakhirDibuat.present
+        ? terakhirDibuat.value
+        : this.terakhirDibuat,
+    sumber: sumber.present ? sumber.value : this.sumber,
+    kategoriId: kategoriId.present ? kategoriId.value : this.kategoriId,
+    catatan: catatan.present ? catatan.value : this.catatan,
+    aktif: aktif ?? this.aktif,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isSynced: isSynced ?? this.isSynced,
+    isDeleted: isDeleted ?? this.isDeleted,
+  );
+  RecurringTableData copyWithCompanion(RecurringTableCompanion data) {
+    return RecurringTableData(
+      id: data.id.present ? data.id.value : this.id,
+      tipe: data.tipe.present ? data.tipe.value : this.tipe,
+      nominal: data.nominal.present ? data.nominal.value : this.nominal,
+      nominalBebas: data.nominalBebas.present
+          ? data.nominalBebas.value
+          : this.nominalBebas,
+      frekuensi: data.frekuensi.present ? data.frekuensi.value : this.frekuensi,
+      tanggalMulai: data.tanggalMulai.present
+          ? data.tanggalMulai.value
+          : this.tanggalMulai,
+      tanggalAkhir: data.tanggalAkhir.present
+          ? data.tanggalAkhir.value
+          : this.tanggalAkhir,
+      terakhirDibuat: data.terakhirDibuat.present
+          ? data.terakhirDibuat.value
+          : this.terakhirDibuat,
+      sumber: data.sumber.present ? data.sumber.value : this.sumber,
+      kategoriId: data.kategoriId.present
+          ? data.kategoriId.value
+          : this.kategoriId,
+      catatan: data.catatan.present ? data.catatan.value : this.catatan,
+      aktif: data.aktif.present ? data.aktif.value : this.aktif,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTableData(')
+          ..write('id: $id, ')
+          ..write('tipe: $tipe, ')
+          ..write('nominal: $nominal, ')
+          ..write('nominalBebas: $nominalBebas, ')
+          ..write('frekuensi: $frekuensi, ')
+          ..write('tanggalMulai: $tanggalMulai, ')
+          ..write('tanggalAkhir: $tanggalAkhir, ')
+          ..write('terakhirDibuat: $terakhirDibuat, ')
+          ..write('sumber: $sumber, ')
+          ..write('kategoriId: $kategoriId, ')
+          ..write('catatan: $catatan, ')
+          ..write('aktif: $aktif, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isSynced: $isSynced, ')
+          ..write('isDeleted: $isDeleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    tipe,
+    nominal,
+    nominalBebas,
+    frekuensi,
+    tanggalMulai,
+    tanggalAkhir,
+    terakhirDibuat,
+    sumber,
+    kategoriId,
+    catatan,
+    aktif,
+    updatedAt,
+    isSynced,
+    isDeleted,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RecurringTableData &&
+          other.id == this.id &&
+          other.tipe == this.tipe &&
+          other.nominal == this.nominal &&
+          other.nominalBebas == this.nominalBebas &&
+          other.frekuensi == this.frekuensi &&
+          other.tanggalMulai == this.tanggalMulai &&
+          other.tanggalAkhir == this.tanggalAkhir &&
+          other.terakhirDibuat == this.terakhirDibuat &&
+          other.sumber == this.sumber &&
+          other.kategoriId == this.kategoriId &&
+          other.catatan == this.catatan &&
+          other.aktif == this.aktif &&
+          other.updatedAt == this.updatedAt &&
+          other.isSynced == this.isSynced &&
+          other.isDeleted == this.isDeleted);
+}
+
+class RecurringTableCompanion extends UpdateCompanion<RecurringTableData> {
+  final Value<String> id;
+  final Value<String> tipe;
+  final Value<double> nominal;
+  final Value<double?> nominalBebas;
+  final Value<String> frekuensi;
+  final Value<DateTime> tanggalMulai;
+  final Value<DateTime?> tanggalAkhir;
+  final Value<DateTime?> terakhirDibuat;
+  final Value<String?> sumber;
+  final Value<String?> kategoriId;
+  final Value<String?> catatan;
+  final Value<bool> aktif;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isSynced;
+  final Value<bool> isDeleted;
+  final Value<int> rowid;
+  const RecurringTableCompanion({
+    this.id = const Value.absent(),
+    this.tipe = const Value.absent(),
+    this.nominal = const Value.absent(),
+    this.nominalBebas = const Value.absent(),
+    this.frekuensi = const Value.absent(),
+    this.tanggalMulai = const Value.absent(),
+    this.tanggalAkhir = const Value.absent(),
+    this.terakhirDibuat = const Value.absent(),
+    this.sumber = const Value.absent(),
+    this.kategoriId = const Value.absent(),
+    this.catatan = const Value.absent(),
+    this.aktif = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isSynced = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RecurringTableCompanion.insert({
+    required String id,
+    required String tipe,
+    required double nominal,
+    this.nominalBebas = const Value.absent(),
+    required String frekuensi,
+    required DateTime tanggalMulai,
+    this.tanggalAkhir = const Value.absent(),
+    this.terakhirDibuat = const Value.absent(),
+    this.sumber = const Value.absent(),
+    this.kategoriId = const Value.absent(),
+    this.catatan = const Value.absent(),
+    this.aktif = const Value.absent(),
+    required DateTime updatedAt,
+    this.isSynced = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       tipe = Value(tipe),
+       nominal = Value(nominal),
+       frekuensi = Value(frekuensi),
+       tanggalMulai = Value(tanggalMulai),
+       updatedAt = Value(updatedAt);
+  static Insertable<RecurringTableData> custom({
+    Expression<String>? id,
+    Expression<String>? tipe,
+    Expression<double>? nominal,
+    Expression<double>? nominalBebas,
+    Expression<String>? frekuensi,
+    Expression<DateTime>? tanggalMulai,
+    Expression<DateTime>? tanggalAkhir,
+    Expression<DateTime>? terakhirDibuat,
+    Expression<String>? sumber,
+    Expression<String>? kategoriId,
+    Expression<String>? catatan,
+    Expression<bool>? aktif,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isSynced,
+    Expression<bool>? isDeleted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipe != null) 'tipe': tipe,
+      if (nominal != null) 'nominal': nominal,
+      if (nominalBebas != null) 'nominal_bebas': nominalBebas,
+      if (frekuensi != null) 'frekuensi': frekuensi,
+      if (tanggalMulai != null) 'tanggal_mulai': tanggalMulai,
+      if (tanggalAkhir != null) 'tanggal_akhir': tanggalAkhir,
+      if (terakhirDibuat != null) 'terakhir_dibuat': terakhirDibuat,
+      if (sumber != null) 'sumber': sumber,
+      if (kategoriId != null) 'kategori_id': kategoriId,
+      if (catatan != null) 'catatan': catatan,
+      if (aktif != null) 'aktif': aktif,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isSynced != null) 'is_synced': isSynced,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RecurringTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? tipe,
+    Value<double>? nominal,
+    Value<double?>? nominalBebas,
+    Value<String>? frekuensi,
+    Value<DateTime>? tanggalMulai,
+    Value<DateTime?>? tanggalAkhir,
+    Value<DateTime?>? terakhirDibuat,
+    Value<String?>? sumber,
+    Value<String?>? kategoriId,
+    Value<String?>? catatan,
+    Value<bool>? aktif,
+    Value<DateTime>? updatedAt,
+    Value<bool>? isSynced,
+    Value<bool>? isDeleted,
+    Value<int>? rowid,
+  }) {
+    return RecurringTableCompanion(
+      id: id ?? this.id,
+      tipe: tipe ?? this.tipe,
+      nominal: nominal ?? this.nominal,
+      nominalBebas: nominalBebas ?? this.nominalBebas,
+      frekuensi: frekuensi ?? this.frekuensi,
+      tanggalMulai: tanggalMulai ?? this.tanggalMulai,
+      tanggalAkhir: tanggalAkhir ?? this.tanggalAkhir,
+      terakhirDibuat: terakhirDibuat ?? this.terakhirDibuat,
+      sumber: sumber ?? this.sumber,
+      kategoriId: kategoriId ?? this.kategoriId,
+      catatan: catatan ?? this.catatan,
+      aktif: aktif ?? this.aktif,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isSynced: isSynced ?? this.isSynced,
+      isDeleted: isDeleted ?? this.isDeleted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (tipe.present) {
+      map['tipe'] = Variable<String>(tipe.value);
+    }
+    if (nominal.present) {
+      map['nominal'] = Variable<double>(nominal.value);
+    }
+    if (nominalBebas.present) {
+      map['nominal_bebas'] = Variable<double>(nominalBebas.value);
+    }
+    if (frekuensi.present) {
+      map['frekuensi'] = Variable<String>(frekuensi.value);
+    }
+    if (tanggalMulai.present) {
+      map['tanggal_mulai'] = Variable<DateTime>(tanggalMulai.value);
+    }
+    if (tanggalAkhir.present) {
+      map['tanggal_akhir'] = Variable<DateTime>(tanggalAkhir.value);
+    }
+    if (terakhirDibuat.present) {
+      map['terakhir_dibuat'] = Variable<DateTime>(terakhirDibuat.value);
+    }
+    if (sumber.present) {
+      map['sumber'] = Variable<String>(sumber.value);
+    }
+    if (kategoriId.present) {
+      map['kategori_id'] = Variable<String>(kategoriId.value);
+    }
+    if (catatan.present) {
+      map['catatan'] = Variable<String>(catatan.value);
+    }
+    if (aktif.present) {
+      map['aktif'] = Variable<bool>(aktif.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipe: $tipe, ')
+          ..write('nominal: $nominal, ')
+          ..write('nominalBebas: $nominalBebas, ')
+          ..write('frekuensi: $frekuensi, ')
+          ..write('tanggalMulai: $tanggalMulai, ')
+          ..write('tanggalAkhir: $tanggalAkhir, ')
+          ..write('terakhirDibuat: $terakhirDibuat, ')
+          ..write('sumber: $sumber, ')
+          ..write('kategoriId: $kategoriId, ')
+          ..write('catatan: $catatan, ')
+          ..write('aktif: $aktif, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isSynced: $isSynced, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2537,6 +3414,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UtangTableTable utangTable = $UtangTableTable(this);
   late final $KategoriTableTable kategoriTable = $KategoriTableTable(this);
   late final $SyncMetaTableTable syncMetaTable = $SyncMetaTableTable(this);
+  late final $RecurringTableTable recurringTable = $RecurringTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2547,6 +3425,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     utangTable,
     kategoriTable,
     syncMetaTable,
+    recurringTable,
   ];
 }
 
@@ -3845,6 +4724,412 @@ typedef $$SyncMetaTableTableProcessedTableManager =
       SyncMetaTableData,
       PrefetchHooks Function()
     >;
+typedef $$RecurringTableTableCreateCompanionBuilder =
+    RecurringTableCompanion Function({
+      required String id,
+      required String tipe,
+      required double nominal,
+      Value<double?> nominalBebas,
+      required String frekuensi,
+      required DateTime tanggalMulai,
+      Value<DateTime?> tanggalAkhir,
+      Value<DateTime?> terakhirDibuat,
+      Value<String?> sumber,
+      Value<String?> kategoriId,
+      Value<String?> catatan,
+      Value<bool> aktif,
+      required DateTime updatedAt,
+      Value<bool> isSynced,
+      Value<bool> isDeleted,
+      Value<int> rowid,
+    });
+typedef $$RecurringTableTableUpdateCompanionBuilder =
+    RecurringTableCompanion Function({
+      Value<String> id,
+      Value<String> tipe,
+      Value<double> nominal,
+      Value<double?> nominalBebas,
+      Value<String> frekuensi,
+      Value<DateTime> tanggalMulai,
+      Value<DateTime?> tanggalAkhir,
+      Value<DateTime?> terakhirDibuat,
+      Value<String?> sumber,
+      Value<String?> kategoriId,
+      Value<String?> catatan,
+      Value<bool> aktif,
+      Value<DateTime> updatedAt,
+      Value<bool> isSynced,
+      Value<bool> isDeleted,
+      Value<int> rowid,
+    });
+
+class $$RecurringTableTableFilterComposer
+    extends Composer<_$AppDatabase, $RecurringTableTable> {
+  $$RecurringTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tipe => $composableBuilder(
+    column: $table.tipe,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get nominal => $composableBuilder(
+    column: $table.nominal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get nominalBebas => $composableBuilder(
+    column: $table.nominalBebas,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get frekuensi => $composableBuilder(
+    column: $table.frekuensi,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get tanggalAkhir => $composableBuilder(
+    column: $table.tanggalAkhir,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get terakhirDibuat => $composableBuilder(
+    column: $table.terakhirDibuat,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sumber => $composableBuilder(
+    column: $table.sumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kategoriId => $composableBuilder(
+    column: $table.kategoriId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get catatan => $composableBuilder(
+    column: $table.catatan,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get aktif => $composableBuilder(
+    column: $table.aktif,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+    column: $table.isSynced,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$RecurringTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $RecurringTableTable> {
+  $$RecurringTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tipe => $composableBuilder(
+    column: $table.tipe,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get nominal => $composableBuilder(
+    column: $table.nominal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get nominalBebas => $composableBuilder(
+    column: $table.nominalBebas,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get frekuensi => $composableBuilder(
+    column: $table.frekuensi,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get tanggalAkhir => $composableBuilder(
+    column: $table.tanggalAkhir,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get terakhirDibuat => $composableBuilder(
+    column: $table.terakhirDibuat,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sumber => $composableBuilder(
+    column: $table.sumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kategoriId => $composableBuilder(
+    column: $table.kategoriId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get catatan => $composableBuilder(
+    column: $table.catatan,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get aktif => $composableBuilder(
+    column: $table.aktif,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+    column: $table.isSynced,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$RecurringTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RecurringTableTable> {
+  $$RecurringTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get tipe =>
+      $composableBuilder(column: $table.tipe, builder: (column) => column);
+
+  GeneratedColumn<double> get nominal =>
+      $composableBuilder(column: $table.nominal, builder: (column) => column);
+
+  GeneratedColumn<double> get nominalBebas => $composableBuilder(
+    column: $table.nominalBebas,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get frekuensi =>
+      $composableBuilder(column: $table.frekuensi, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get tanggalMulai => $composableBuilder(
+    column: $table.tanggalMulai,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get tanggalAkhir => $composableBuilder(
+    column: $table.tanggalAkhir,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get terakhirDibuat => $composableBuilder(
+    column: $table.terakhirDibuat,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sumber =>
+      $composableBuilder(column: $table.sumber, builder: (column) => column);
+
+  GeneratedColumn<String> get kategoriId => $composableBuilder(
+    column: $table.kategoriId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get catatan =>
+      $composableBuilder(column: $table.catatan, builder: (column) => column);
+
+  GeneratedColumn<bool> get aktif =>
+      $composableBuilder(column: $table.aktif, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+}
+
+class $$RecurringTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RecurringTableTable,
+          RecurringTableData,
+          $$RecurringTableTableFilterComposer,
+          $$RecurringTableTableOrderingComposer,
+          $$RecurringTableTableAnnotationComposer,
+          $$RecurringTableTableCreateCompanionBuilder,
+          $$RecurringTableTableUpdateCompanionBuilder,
+          (
+            RecurringTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $RecurringTableTable,
+              RecurringTableData
+            >,
+          ),
+          RecurringTableData,
+          PrefetchHooks Function()
+        > {
+  $$RecurringTableTableTableManager(
+    _$AppDatabase db,
+    $RecurringTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RecurringTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RecurringTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RecurringTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> tipe = const Value.absent(),
+                Value<double> nominal = const Value.absent(),
+                Value<double?> nominalBebas = const Value.absent(),
+                Value<String> frekuensi = const Value.absent(),
+                Value<DateTime> tanggalMulai = const Value.absent(),
+                Value<DateTime?> tanggalAkhir = const Value.absent(),
+                Value<DateTime?> terakhirDibuat = const Value.absent(),
+                Value<String?> sumber = const Value.absent(),
+                Value<String?> kategoriId = const Value.absent(),
+                Value<String?> catatan = const Value.absent(),
+                Value<bool> aktif = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isSynced = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTableCompanion(
+                id: id,
+                tipe: tipe,
+                nominal: nominal,
+                nominalBebas: nominalBebas,
+                frekuensi: frekuensi,
+                tanggalMulai: tanggalMulai,
+                tanggalAkhir: tanggalAkhir,
+                terakhirDibuat: terakhirDibuat,
+                sumber: sumber,
+                kategoriId: kategoriId,
+                catatan: catatan,
+                aktif: aktif,
+                updatedAt: updatedAt,
+                isSynced: isSynced,
+                isDeleted: isDeleted,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String tipe,
+                required double nominal,
+                Value<double?> nominalBebas = const Value.absent(),
+                required String frekuensi,
+                required DateTime tanggalMulai,
+                Value<DateTime?> tanggalAkhir = const Value.absent(),
+                Value<DateTime?> terakhirDibuat = const Value.absent(),
+                Value<String?> sumber = const Value.absent(),
+                Value<String?> kategoriId = const Value.absent(),
+                Value<String?> catatan = const Value.absent(),
+                Value<bool> aktif = const Value.absent(),
+                required DateTime updatedAt,
+                Value<bool> isSynced = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTableCompanion.insert(
+                id: id,
+                tipe: tipe,
+                nominal: nominal,
+                nominalBebas: nominalBebas,
+                frekuensi: frekuensi,
+                tanggalMulai: tanggalMulai,
+                tanggalAkhir: tanggalAkhir,
+                terakhirDibuat: terakhirDibuat,
+                sumber: sumber,
+                kategoriId: kategoriId,
+                catatan: catatan,
+                aktif: aktif,
+                updatedAt: updatedAt,
+                isSynced: isSynced,
+                isDeleted: isDeleted,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$RecurringTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RecurringTableTable,
+      RecurringTableData,
+      $$RecurringTableTableFilterComposer,
+      $$RecurringTableTableOrderingComposer,
+      $$RecurringTableTableAnnotationComposer,
+      $$RecurringTableTableCreateCompanionBuilder,
+      $$RecurringTableTableUpdateCompanionBuilder,
+      (
+        RecurringTableData,
+        BaseReferences<_$AppDatabase, $RecurringTableTable, RecurringTableData>,
+      ),
+      RecurringTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3859,4 +5144,6 @@ class $AppDatabaseManager {
       $$KategoriTableTableTableManager(_db, _db.kategoriTable);
   $$SyncMetaTableTableTableManager get syncMetaTable =>
       $$SyncMetaTableTableTableManager(_db, _db.syncMetaTable);
+  $$RecurringTableTableTableManager get recurringTable =>
+      $$RecurringTableTableTableManager(_db, _db.recurringTable);
 }
