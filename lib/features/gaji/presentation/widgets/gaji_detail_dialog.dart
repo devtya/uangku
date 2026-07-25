@@ -50,7 +50,7 @@ Future<GajiDetailAction?> showGajiDetailDialog(
   return showDialog<GajiDetailAction>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Detail Gaji'),
+      title: const Text('Detail Pendapatan'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

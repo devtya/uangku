@@ -479,11 +479,11 @@ class _RecentTransactions extends StatelessWidget {
         final txns = <_Txn>[
           ...gaji.map((g) => _Txn(
                 date: g.tanggal,
-                title: 'Gaji',
+                title: (g.catatan?.isNotEmpty ?? false) ? g.catatan! : 'Pendapatan',
                 subtitle: dateFormat.format(g.tanggal),
                 amount: '+${_rp.format(g.jumlah)}',
                 income: true,
-                glyph: 'G',
+                glyph: 'P',
               )),
           ...pengeluaran.map((p) {
             final nama = namaById[p.kategoriId] ?? 'Lainnya';

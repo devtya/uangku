@@ -57,7 +57,7 @@ class _BottomNav extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _navItem(context, 0, Icons.home_rounded, 'Beranda'),
-            _navItem(context, 1, Icons.account_balance_wallet_rounded, 'Gaji'),
+            _navItem(context, 1, Icons.account_balance_wallet_rounded, 'Pendapatan'),
             _navItem(context, 2, Icons.receipt_long_rounded, 'Pengeluaran'),
             _navItem(context, 3, Icons.credit_card_rounded, 'Utang'),
           ],

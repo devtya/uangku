@@ -117,7 +117,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  isEditing ? 'Edit Gaji' : 'Tambah Gaji',
+                  isEditing ? 'Edit Pendapatan' : 'Tambah Pendapatan',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 24),
@@ -132,7 +132,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
                   onChanged: (_) => setState(() {}),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Masukkan jumlah gaji';
+                      return 'Masukkan jumlah pendapatan';
                     }
                     final parsed = double.tryParse(value.replaceAll('.', ''));
                     if (parsed == null || parsed <= 0) {
@@ -157,7 +157,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
                     final bebas = double.tryParse(value.replaceAll('.', ''));
                     if (bebas == null || bebas < 0) return 'Nilai tidak valid';
                     if (bebas > _parse(_jumlahController.text)) {
-                      return 'Tidak boleh melebihi jumlah gaji';
+                      return 'Tidak boleh melebihi jumlah pendapatan';
                     }
                     return null;
                   },
@@ -180,7 +180,7 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
                   controller: _catatanController,
                   maxLines: 3,
                   decoration: const InputDecoration(
-                    labelText: 'Catatan (opsional)',
+                    labelText: 'Sumber (mis. gaji, angpao) — opsional',
                   ),
                 ),
                 const SizedBox(height: 24),

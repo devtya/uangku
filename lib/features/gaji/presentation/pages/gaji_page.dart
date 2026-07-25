@@ -68,8 +68,8 @@ class _GajiPageState extends State<GajiPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hapus Gaji'),
-        content: const Text('Yakin ingin menghapus data gaji ini?'),
+        title: const Text('Hapus Pendapatan'),
+        content: const Text('Yakin ingin menghapus data pendapatan ini?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -107,7 +107,7 @@ class _GajiPageState extends State<GajiPage> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Gaji',
+                          'Pendapatan',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -227,7 +227,7 @@ class _GajiPageState extends State<GajiPage> {
                                 padding: EdgeInsets.only(top: 40),
                                 child: Center(
                                   child: Text(
-                                    'Belum ada data gaji',
+                                    'Belum ada data pendapatan',
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: context.colors.textSecondary,
