@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+import 'package:uangku/core/notifications/notification_service.dart';
 import 'package:uangku/core/constants/app_constants.dart';
 import 'package:uangku/features/utang/domain/entities/utang_entity.dart';
 import 'package:uangku/features/utang/domain/usecases/add_utang.dart';
@@ -17,6 +18,7 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
   final UpdateUtang _updateUtang;
   final DeleteUtang _deleteUtang;
   final BayarCicilanUtang _bayarCicilanUtang;
+  final NotificationService _notificationService;
   StreamSubscription<List<UtangEntity>>? _subscription;
 
   UtangBloc({
@@ -25,11 +27,13 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
     required UpdateUtang updateUtang,
     required DeleteUtang deleteUtang,
     required BayarCicilanUtang bayarCicilanUtang,
+    required NotificationService notificationService,
   })  : _watchAllUtang = watchAllUtang,
         _addUtang = addUtang,
         _updateUtang = updateUtang,
         _deleteUtang = deleteUtang,
         _bayarCicilanUtang = bayarCicilanUtang,
+        _notificationService = notificationService,
         super(const UtangInitial()) {
     on<UtangWatchRequested>(_onWatchRequested);
     on<UtangAddRequested>(_onAddRequested);
@@ -115,6 +119,8 @@ class UtangBloc extends Bloc<UtangEvent, UtangState> {
     Emitter<UtangState> emit,
   ) {
     emit(UtangLoaded(event.list));
+    // Jadwalkan ulang notifikasi jatuh tempo tiap data utang berubah.
+    _notificationService.rescheduleUtang(event.list);
   }
 
   void _onErrorOccurred(

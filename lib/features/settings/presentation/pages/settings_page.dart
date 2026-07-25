@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:uangku/core/di/injection.dart';
+import 'package:uangku/core/notifications/notification_service.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
+import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
 import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/core/update/update_service.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
@@ -46,6 +48,7 @@ class SettingsPage extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const RecurringPage()),
             ),
           ),
+          const _UtangNotifTile(),
           const Divider(height: 24),
           _sectionLabel(context, 'Akun'),
           ListTile(
@@ -215,6 +218,39 @@ class SettingsPage extends StatelessWidget {
           ? Icon(Icons.check_rounded, color: context.colors.primary)
           : null,
       onTap: () => context.read<ThemeCubit>().setMode(mode),
+    );
+  }
+}
+
+class _UtangNotifTile extends StatefulWidget {
+  const _UtangNotifTile();
+
+  @override
+  State<_UtangNotifTile> createState() => _UtangNotifTileState();
+}
+
+class _UtangNotifTileState extends State<_UtangNotifTile> {
+  late bool _on = sl<NotificationService>().enabled;
+  bool _busy = false;
+
+  Future<void> _toggle(bool value) async {
+    setState(() {
+      _on = value;
+      _busy = true;
+    });
+    final list = await sl<WatchAllUtang>()().first;
+    await sl<NotificationService>().setEnabled(value, list);
+    if (mounted) setState(() => _busy = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      secondary: const Icon(Icons.notifications_active_outlined),
+      title: const Text('Pengingat jatuh tempo utang'),
+      subtitle: const Text('Notifikasi H-1 & hari-H, jam 08:00'),
+      value: _on,
+      onChanged: _busy ? null : _toggle,
     );
   }
 }

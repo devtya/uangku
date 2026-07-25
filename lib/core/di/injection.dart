@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uangku/core/notifications/notification_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uangku/core/database/app_database.dart';
@@ -67,6 +69,8 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => SyncService(sl(), sl(), sl()));
   sl.registerLazySingleton(() => ThemeCubit(sl()));
   sl.registerLazySingleton(() => UpdateService());
+  sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
+  sl.registerLazySingleton(() => NotificationService(sl(), sl()));
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(firebaseAuth: sl(), googleSignIn: sl()),
@@ -160,6 +164,7 @@ Future<void> initDependencies() async {
       updateUtang: sl(),
       deleteUtang: sl(),
       bayarCicilanUtang: sl(),
+      notificationService: sl(),
     ),
   );
 
@@ -181,6 +186,11 @@ Future<void> initDependencies() async {
 
   // Muat preferensi tema tersimpan sebelum app dibangun.
   await sl<ThemeCubit>().load();
+
+  // Inisialisasi notifikasi lokal (timezone + channel).
+  try {
+    await sl<NotificationService>().init();
+  } catch (_) {}
 
   // Generate transaksi berulang yang terlewat (catch-up saat app dibuka).
   try {
