@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:uangku/core/di/injection.dart';
 import 'package:uangku/core/notifications/notification_service.dart';
+import 'package:uangku/core/settings/avatar_cubit.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
+import 'package:uangku/features/auth/presentation/bloc/auth_state.dart';
+import 'package:uangku/shared/widgets/app_avatar.dart';
 import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
 import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/core/update/update_service.dart';
@@ -22,6 +26,9 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
+          _sectionLabel(context, 'Profil'),
+          const _ProfileTile(),
+          const Divider(height: 24),
           _sectionLabel(context, 'Tampilan'),
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, mode) {
@@ -218,6 +225,110 @@ class SettingsPage extends StatelessWidget {
           ? Icon(Icons.check_rounded, color: context.colors.primary)
           : null,
       onTap: () => context.read<ThemeCubit>().setMode(mode),
+    );
+  }
+}
+
+/// Emoji preset avatar bawaan.
+const _presetEmojis = ['🐱', '🐶', '🦊', '🐼', '🦁', '🐨', '🐯', '🐵', '🐸', '🐧'];
+
+class _ProfileTile extends StatelessWidget {
+  const _ProfileTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = context.watch<AuthBloc>().state;
+    final user = authState is AuthAuthenticated ? authState.user : null;
+    final nama = (user?.displayName?.trim().isNotEmpty == true
+            ? user!.displayName!.trim()
+            : user?.email.split('@').first) ??
+        'Pengguna';
+    return ListTile(
+      leading: const AppAvatar(size: 48),
+      title: Text(nama, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(user?.email ?? '-'),
+      trailing: const Icon(Icons.edit_outlined),
+      onTap: () => _showAvatarPicker(context),
+    );
+  }
+
+  void _showAvatarPicker(BuildContext context) {
+    final cubit = context.read<AvatarCubit>();
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetCtx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+                child: Text('Ganti avatar',
+                    style: Theme.of(sheetCtx).textTheme.titleMedium),
+              ),
+              ListTile(
+                leading: const Icon(Icons.account_circle_outlined),
+                title: const Text('Foto Google'),
+                onTap: () {
+                  cubit.useGoogle();
+                  Navigator.of(sheetCtx).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Pilih dari galeri'),
+                onTap: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  Navigator.of(sheetCtx).pop();
+                  try {
+                    final img = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                      maxWidth: 512,
+                      maxHeight: 512,
+                      imageQuality: 85,
+                    );
+                    if (img != null) await cubit.useCustomFile(img.path);
+                  } catch (e) {
+                    messenger.showSnackBar(
+                        const SnackBar(content: Text('Gagal memuat foto')));
+                  }
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 12, 20, 4),
+                child: Text('Avatar bawaan'),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Wrap(
+                  children: [
+                    for (final e in _presetEmojis)
+                      InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: () {
+                          cubit.usePreset(e);
+                          Navigator.of(sheetCtx).pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: CircleAvatar(
+                            radius: 24,
+                            backgroundColor:
+                                Theme.of(sheetCtx).colorScheme.surfaceContainerHighest,
+                            child: Text(e, style: const TextStyle(fontSize: 26)),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
     );
   }
 }

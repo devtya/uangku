@@ -6,6 +6,8 @@ import 'package:uangku/core/notifications/notification_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uangku/core/database/app_database.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uangku/core/settings/avatar_cubit.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/core/update/update_service.dart';
@@ -68,6 +70,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton(() => SyncService(sl(), sl(), sl()));
   sl.registerLazySingleton(() => ThemeCubit(sl()));
+  sl.registerLazySingleton(() => AvatarCubit(sl()));
   sl.registerLazySingleton(() => UpdateService());
   sl.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
   sl.registerLazySingleton(() => NotificationService(sl(), sl()));
@@ -184,8 +187,10 @@ Future<void> initDependencies() async {
   // termasuk untuk instalasi lama yang tabelnya sudah terisi.
   await sl<KategoriLocalDataSource>().ensureKategori(kKategoriCicilanUtang);
 
-  // Muat preferensi tema tersimpan sebelum app dibangun.
+  // Muat preferensi tema & avatar tersimpan sebelum app dibangun.
   await sl<ThemeCubit>().load();
+  appDocumentsPath = (await getApplicationDocumentsDirectory()).path;
+  await sl<AvatarCubit>().load();
 
   // Inisialisasi notifikasi lokal (timezone + channel).
   try {

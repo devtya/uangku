@@ -6,6 +6,7 @@ import 'package:uangku/core/di/injection.dart';
 import 'package:uangku/core/theme/app_theme.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:uangku/features/auth/presentation/bloc/auth_state.dart';
+import 'package:uangku/shared/widgets/app_avatar.dart';
 import 'package:uangku/features/settings/presentation/pages/settings_page.dart';
 import 'package:uangku/features/gaji/domain/entities/gaji_entity.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_bloc.dart';
@@ -34,7 +35,6 @@ class BerandaPage extends StatelessWidget {
             ? authState.user.displayName!.trim()
             : authState.user.email.split('@').first)
         : 'Pengguna';
-    final initial = nama.isNotEmpty ? nama[0].toUpperCase() : '?';
 
     final gajiList = _gaji(context.watch<GajiBloc>().state);
     final pengeluaranList = _peng(context.watch<PengeluaranBloc>().state);
@@ -97,18 +97,7 @@ class BerandaPage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const SettingsPage()),
                   ),
                   customBorder: const CircleBorder(),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: context.colors.tint, shape: BoxShape.circle),
-                    alignment: Alignment.center,
-                    child: Text(initial,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: context.colors.primary)),
-                  ),
+                  child: const AppAvatar(size: 40),
                 ),
               ],
               ),

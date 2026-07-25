@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:uangku/core/di/injection.dart';
+import 'package:uangku/core/settings/avatar_cubit.dart';
 import 'package:uangku/core/settings/theme_cubit.dart';
 import 'package:uangku/core/sync/sync_service.dart';
 import 'package:uangku/core/theme/app_theme.dart';
@@ -45,6 +46,9 @@ class UangkuApp extends StatelessWidget {
         ),
         BlocProvider<ThemeCubit>(
           create: (_) => sl<ThemeCubit>(),
+        ),
+        BlocProvider<AvatarCubit>(
+          create: (_) => sl<AvatarCubit>(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
