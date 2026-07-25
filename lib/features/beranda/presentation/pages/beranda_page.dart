@@ -77,33 +77,33 @@ class BerandaPage extends StatelessWidget {
                       Text('Halo, $nama',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary)),
+                              color: context.colors.textPrimary)),
                       const SizedBox(height: 4),
                       Text(today,
-                          style: const TextStyle(
-                              fontSize: 12, color: AppColors.textSecondary)),
+                          style: TextStyle(
+                              fontSize: 12, color: context.colors.textSecondary)),
                     ],
                   ),
                 ),
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
-                      color: AppColors.tint, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                      color: context.colors.tint, shape: BoxShape.circle),
                   alignment: Alignment.center,
                   child: Text(initial,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary)),
+                          color: context.colors.primary)),
                 ),
                 const SizedBox(width: 4),
                 IconButton(
                   icon: Icon(Icons.logout_rounded,
-                      size: 18, color: AppColors.textMuted),
+                      size: 18, color: context.colors.textMuted),
                   onPressed: () =>
                       context.read<AuthBloc>().add(const AuthSignOutRequested()),
                 ),
@@ -190,7 +190,7 @@ class _BalanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: context.colors.primary,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -284,11 +284,11 @@ class _SpendingChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final maxTotal = data.fold<double>(0, (m, e) => e.total > m ? e.total : m);
     if (maxTotal == 0) {
-      return const SizedBox(
+      return SizedBox(
         height: 120,
         child: Center(
           child: Text('Belum ada data pengeluaran',
-              style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+              style: TextStyle(fontSize: 12, color: context.colors.textSecondary)),
         ),
       );
     }
@@ -303,8 +303,8 @@ class _SpendingChart extends StatelessWidget {
         height: h,
         decoration: BoxDecoration(
           color: current
-              ? AppColors.primary
-              : AppColors.accent.withValues(alpha: 0.35 + h / 250),
+              ? context.colors.primary
+              : context.colors.accent.withValues(alpha: 0.35 + h / 250),
           borderRadius: BorderRadius.circular(6),
         ),
       ));
@@ -312,7 +312,7 @@ class _SpendingChart extends StatelessWidget {
           style: TextStyle(
               fontSize: 10,
               fontWeight: current ? FontWeight.w700 : FontWeight.w400,
-              color: current ? AppColors.primary : AppColors.textSecondary)));
+              color: current ? context.colors.primary : context.colors.textSecondary)));
     }
     return Column(
       children: [
@@ -346,8 +346,8 @@ class _DueDebts extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         alignment: Alignment.center,
-        child: const Text('Tidak ada utang jatuh tempo',
-            style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+        child: Text('Tidak ada utang jatuh tempo',
+            style: TextStyle(fontSize: 12, color: context.colors.textSecondary)),
       );
     }
     final today = DateTime(now.year, now.month, now.day);
@@ -400,9 +400,9 @@ class _DebtCard extends StatelessWidget {
       width: 220,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: context.colors.card,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: context.colors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,13 +421,13 @@ class _DebtCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                    color: overdue ? Colors.red.shade50 : AppColors.tint,
+                    color: overdue ? Colors.red.shade50 : context.colors.tint,
                     borderRadius: BorderRadius.circular(8)),
                 child: Text(badge,
                     style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: overdue ? Colors.red.shade600 : AppColors.primary)),
+                        color: overdue ? Colors.red.shade600 : context.colors.primary)),
               ),
             ],
           ),
@@ -443,14 +443,14 @@ class _DebtCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 6,
-              backgroundColor: AppColors.divider,
-              valueColor: const AlwaysStoppedAnimation(AppColors.accent),
+              backgroundColor: context.colors.divider,
+              valueColor: AlwaysStoppedAnimation(context.colors.accent),
             ),
           ),
           const SizedBox(height: 10),
           Text('Jatuh tempo $jatuhTempo',
-              style: const TextStyle(
-                  fontSize: 11, color: AppColors.textSecondary)),
+              style: TextStyle(
+                  fontSize: 11, color: context.colors.textSecondary)),
         ],
       ),
     );
@@ -499,8 +499,8 @@ class _RecentTransactions extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 24),
             alignment: Alignment.center,
-            child: const Text('Belum ada transaksi',
-                style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            child: Text('Belum ada transaksi',
+                style: TextStyle(fontSize: 12, color: context.colors.textSecondary)),
           );
         }
 
@@ -545,7 +545,7 @@ class _TxnRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         border: divider
-            ? const Border(bottom: BorderSide(color: AppColors.divider))
+            ? Border(bottom: BorderSide(color: context.colors.divider))
             : null,
       ),
       child: Row(
@@ -554,14 +554,14 @@ class _TxnRow extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-                color: AppColors.accent.withValues(alpha: 0.15),
+                color: context.colors.accent.withValues(alpha: 0.15),
                 shape: BoxShape.circle),
             alignment: Alignment.center,
             child: Text(txn.glyph,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.primary)),
+                    color: context.colors.primary)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -575,8 +575,8 @@ class _TxnRow extends StatelessWidget {
                         fontSize: 13, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 2),
                 Text(txn.subtitle,
-                    style: const TextStyle(
-                        fontSize: 11, color: AppColors.textSecondary)),
+                    style: TextStyle(
+                        fontSize: 11, color: context.colors.textSecondary)),
               ],
             ),
           ),
@@ -584,7 +584,7 @@ class _TxnRow extends StatelessWidget {
               style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: txn.income ? AppColors.primary : AppColors.textPrimary,
+                  color: txn.income ? context.colors.primary : context.colors.textPrimary,
                   fontFeatures: const [FontFeature.tabularFigures()])),
         ],
       ),
@@ -609,7 +609,7 @@ class _SectionHeader extends StatelessWidget {
         if (trailing != null)
           Text(trailing!,
               style:
-                  const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                  TextStyle(fontSize: 12, color: context.colors.textSecondary)),
       ],
     );
   }

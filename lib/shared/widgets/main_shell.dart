@@ -46,9 +46,9 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.card,
-        border: Border(top: BorderSide(color: AppColors.divider)),
+      decoration: BoxDecoration(
+        color: context.colors.card,
+        border: Border(top: BorderSide(color: context.colors.divider)),
       ),
       padding: const EdgeInsets.only(top: 10, bottom: 12),
       child: SafeArea(
@@ -56,19 +56,19 @@ class _BottomNav extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(0, Icons.home_rounded, 'Beranda'),
-            _navItem(1, Icons.account_balance_wallet_rounded, 'Gaji'),
-            _navItem(2, Icons.receipt_long_rounded, 'Pengeluaran'),
-            _navItem(3, Icons.credit_card_rounded, 'Utang'),
+            _navItem(context, 0, Icons.home_rounded, 'Beranda'),
+            _navItem(context, 1, Icons.account_balance_wallet_rounded, 'Gaji'),
+            _navItem(context, 2, Icons.receipt_long_rounded, 'Pengeluaran'),
+            _navItem(context, 3, Icons.credit_card_rounded, 'Utang'),
           ],
         ),
       ),
     );
   }
 
-  Widget _navItem(int index, IconData icon, String label) {
+  Widget _navItem(BuildContext context, int index, IconData icon, String label) {
     final active = index == currentIndex;
-    final color = active ? AppColors.primary : AppColors.textMuted;
+    final color = active ? context.colors.primary : context.colors.textMuted;
     return InkWell(
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(12),

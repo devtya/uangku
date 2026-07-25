@@ -93,19 +93,19 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
                 padding: const EdgeInsets.fromLTRB(20, 14, 12, 14),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Pengeluaran',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.colors.textPrimary,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.tune_rounded,
-                          size: 20, color: AppColors.textMuted),
+                      icon: Icon(Icons.tune_rounded,
+                          size: 20, color: context.colors.textMuted),
                       tooltip: 'Kelola kategori',
                       onPressed: () => showKelolaKategoriSheet(context),
                     ),
@@ -179,7 +179,7 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
           margin: const EdgeInsets.only(bottom: 18),
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: context.colors.primary,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Column(
@@ -202,22 +202,22 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
             ],
           ),
         ),
-        const Text(
+        Text(
           'Riwayat',
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
+            color: context.colors.textPrimary,
           ),
         ),
         const SizedBox(height: 6),
         if (list.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 40),
             child: Center(
               child: Text(
                 'Belum ada pengeluaran',
-                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                style: TextStyle(fontSize: 13, color: context.colors.textSecondary),
               ),
             ),
           )

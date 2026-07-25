@@ -46,6 +46,8 @@ class UangkuApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Uangku',
         theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
         home: const AuthGate(),
       ),
     );

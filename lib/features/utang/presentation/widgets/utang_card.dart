@@ -30,9 +30,9 @@ class UtangCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.card,
+          color: context.colors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.colors.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,15 +44,15 @@ class UtangCard extends StatelessWidget {
                     utang.namaUtang,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.colors.textPrimary,
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                _statusBadge(lunas),
+                _statusBadge(context, lunas),
               ],
             ),
             const SizedBox(height: 10),
@@ -61,9 +61,9 @@ class UtangCard extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: utang.progressPercent,
                 minHeight: 8,
-                backgroundColor: AppColors.divider,
+                backgroundColor: context.colors.divider,
                 valueColor: AlwaysStoppedAnimation(
-                  lunas ? Colors.green.shade600 : AppColors.primary,
+                  lunas ? Colors.green.shade600 : context.colors.primary,
                 ),
               ),
             ),
@@ -73,28 +73,28 @@ class UtangCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '${rp.format(utang.jumlahTerbayar)} / ${rp.format(utang.jumlahTotal)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textSecondary,
-                      fontFeatures: [FontFeature.tabularFigures()],
+                      color: context.colors.textSecondary,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
                 ),
                 if (!lunas)
                   Text(
                     'Sisa ${rp.format(utang.sisaUtang)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                      fontFeatures: [FontFeature.tabularFigures()],
+                      color: context.colors.textPrimary,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
               ],
             ),
             if (utang.jatuhTempo != null) ...[
               const SizedBox(height: 6),
-              _jatuhTempoRow(lunas),
+              _jatuhTempoRow(context, lunas),
             ],
           ],
         ),
@@ -102,9 +102,9 @@ class UtangCard extends StatelessWidget {
     );
   }
 
-  Widget _statusBadge(bool lunas) {
-    final color = lunas ? Colors.green.shade700 : AppColors.accent;
-    final bg = lunas ? Colors.green.shade50 : AppColors.tint;
+  Widget _statusBadge(BuildContext context, bool lunas) {
+    final color = lunas ? Colors.green.shade700 : context.colors.accent;
+    final bg = lunas ? Colors.green.shade50 : context.colors.tint;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
@@ -122,14 +122,14 @@ class UtangCard extends StatelessWidget {
     );
   }
 
-  Widget _jatuhTempoRow(bool lunas) {
+  Widget _jatuhTempoRow(BuildContext context, bool lunas) {
     final due = utang.jatuhTempo!;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final dueDay = DateTime(due.year, due.month, due.day);
     final selisihHari = dueDay.difference(today).inDays;
 
-    Color color = AppColors.textSecondary;
+    Color color = context.colors.textSecondary;
     String? tanda;
     if (!lunas) {
       if (selisihHari < 0) {

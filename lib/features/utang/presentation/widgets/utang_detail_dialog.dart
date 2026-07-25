@@ -24,15 +24,15 @@ class _DetailRow extends StatelessWidget {
           SizedBox(
             width: 92,
             child: Text(label,
-                style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                style: TextStyle(fontSize: 12, color: context.colors.textSecondary)),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
               ),
             ),
           ),
@@ -75,19 +75,19 @@ Future<UtangDetailAction?> showUtangDetailDialog(
                 child: LinearProgressIndicator(
                   value: utang.progressPercent,
                   minHeight: 8,
-                  backgroundColor: AppColors.divider,
+                  backgroundColor: context.colors.divider,
                   valueColor: AlwaysStoppedAnimation(
-                    lunas ? Colors.green.shade600 : AppColors.primary,
+                    lunas ? Colors.green.shade600 : context.colors.primary,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Riwayat Pembayaran',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 6),
@@ -132,9 +132,9 @@ class _RiwayatCicilan extends StatelessWidget {
       builder: (context, snapshot) {
         final list = snapshot.data ?? const <PengeluaranEntity>[];
         if (list.isEmpty) {
-          return const Text(
+          return Text(
             'Belum ada pembayaran',
-            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
           );
         }
         return Column(
@@ -144,22 +144,22 @@ class _RiwayatCicilan extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Row(
                     children: [
-                      const Icon(Icons.payments_outlined,
-                          size: 14, color: AppColors.textMuted),
+                      Icon(Icons.payments_outlined,
+                          size: 14, color: context.colors.textMuted),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           dateFormat.format(p.tanggal),
-                          style: const TextStyle(
-                              fontSize: 12, color: AppColors.textSecondary),
+                          style: TextStyle(
+                              fontSize: 12, color: context.colors.textSecondary),
                         ),
                       ),
                       Text(
                         rp.format(p.jumlah),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: context.colors.textPrimary,
                           fontFeatures: [FontFeature.tabularFigures()],
                         ),
                       ),

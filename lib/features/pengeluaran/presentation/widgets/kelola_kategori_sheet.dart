@@ -12,7 +12,7 @@ Future<void> showKelolaKategoriSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppColors.card,
+    backgroundColor: context.colors.card,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -58,12 +58,12 @@ class _KelolaKategoriSheet extends StatelessWidget {
                 builder: (context, snapshot) {
                   final list = snapshot.data ?? const <KategoriEntity>[];
                   if (list.isEmpty) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.symmetric(vertical: 30),
                       child: Center(
                         child: Text('Belum ada kategori',
                             style: TextStyle(
-                                fontSize: 13, color: AppColors.textSecondary)),
+                                fontSize: 13, color: context.colors.textSecondary)),
                       ),
                     );
                   }
@@ -71,7 +71,7 @@ class _KelolaKategoriSheet extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: list.length,
                     separatorBuilder: (_, __) =>
-                        const Divider(height: 1, color: AppColors.divider),
+                        Divider(height: 1, color: context.colors.divider),
                     itemBuilder: (_, i) => _row(context, list[i]),
                   );
                 },
@@ -91,25 +91,25 @@ class _KelolaKategoriSheet extends StatelessWidget {
         children: [
           Expanded(
             child: Text(k.nama,
-                style: const TextStyle(
-                    fontSize: 14, color: AppColors.textPrimary)),
+                style: TextStyle(
+                    fontSize: 14, color: context.colors.textPrimary)),
           ),
           if (terkunci)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(right: 4),
               child: Icon(Icons.lock_outline,
-                  size: 18, color: AppColors.textMuted),
+                  size: 18, color: context.colors.textMuted),
             )
           else ...[
             IconButton(
               icon: const Icon(Icons.edit_outlined, size: 18),
-              color: AppColors.textSecondary,
+              color: context.colors.textSecondary,
               tooltip: 'Ubah nama',
               onPressed: () => _promptRename(context, k),
             ),
             IconButton(
               icon: const Icon(Icons.delete_outline, size: 18),
-              color: AppColors.textMuted,
+              color: context.colors.textMuted,
               tooltip: 'Hapus',
               onPressed: () => _confirmDelete(context, k),
             ),

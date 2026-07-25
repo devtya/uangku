@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.card,
+        backgroundColor: context.colors.card,
         body: Column(
           children: [
             // Top brand panel
@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
               flex: 5,
               child: Container(
                 width: double.infinity,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 padding: const EdgeInsets.all(40),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -39,16 +39,16 @@ class LoginPage extends StatelessWidget {
                       width: 64,
                       height: 64,
                       decoration: BoxDecoration(
-                        color: AppColors.card,
+                        color: context.colors.card,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         'u',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                         ),
                       ),
                     ),
@@ -85,19 +85,19 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Masuk untuk mulai',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: context.colors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       'Data kamu aman dan tersinkron otomatis.',
                       style:
-                          TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                          TextStyle(fontSize: 13, color: context.colors.textSecondary),
                     ),
                     const SizedBox(height: 20),
                     BlocBuilder<AuthBloc, AuthState>(
@@ -113,14 +113,14 @@ class LoginPage extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 12),
-                    const Text(
+                    Text(
                       'Dengan masuk, kamu menyetujui Ketentuan Layanan & '
                       'Kebijakan Privasi.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 11,
                         height: 1.5,
-                        color: AppColors.textMuted,
+                        color: context.colors.textMuted,
                       ),
                     ),
                   ],
@@ -151,9 +151,9 @@ class _GoogleButton extends StatelessWidget {
           height: 52,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.colors.border),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _GoogleGlyph(),
@@ -163,7 +163,7 @@ class _GoogleButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: context.colors.textPrimary,
                 ),
               ),
             ],
@@ -182,17 +182,17 @@ class _GoogleGlyph extends StatelessWidget {
     return Container(
       width: 20,
       height: 20,
-      decoration: const BoxDecoration(
-        color: AppColors.tint,
+      decoration: BoxDecoration(
+        color: context.colors.tint,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
-      child: const Text(
+      child: Text(
         'G',
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,
-          color: AppColors.accent,
+          color: context.colors.accent,
         ),
       ),
     );

@@ -99,7 +99,7 @@ class _GajiPageState extends State<GajiPage> {
         children: [
           Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 child: Row(
                   children: [
@@ -109,7 +109,7 @@ class _GajiPageState extends State<GajiPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.colors.textPrimary,
                         ),
                       ),
                     ),
@@ -154,7 +154,7 @@ class _GajiPageState extends State<GajiPage> {
                               margin: const EdgeInsets.only(bottom: 18),
                               padding: const EdgeInsets.all(18),
                               decoration: BoxDecoration(
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                                 borderRadius: BorderRadius.circular(18),
                               ),
                               child: Row(
@@ -210,24 +210,24 @@ class _GajiPageState extends State<GajiPage> {
                                 ],
                               ),
                             ),
-                            const Text(
+                            Text(
                               'Riwayat',
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
+                                color: context.colors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 6),
                             if (list.isEmpty)
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(top: 40),
                                 child: Center(
                                   child: Text(
                                     'Belum ada data gaji',
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: AppColors.textSecondary,
+                                      color: context.colors.textSecondary,
                                     ),
                                   ),
                                 ),

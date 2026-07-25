@@ -33,25 +33,25 @@ class PengeluaranCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.divider)),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: context.colors.divider)),
         ),
         child: Row(
           children: [
             Container(
               width: 40,
               height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.tint,
+              decoration: BoxDecoration(
+                color: context.colors.tint,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
               child: Text(
                 kategoriNama.isNotEmpty ? kategoriNama[0].toUpperCase() : '?',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
               ),
             ),
@@ -62,10 +62,10 @@ class PengeluaranCard extends StatelessWidget {
                 children: [
                   Text(
                     kategoriNama,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: context.colors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -73,9 +73,9 @@ class PengeluaranCard extends StatelessWidget {
                     subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
                   ),
                 ],
@@ -84,10 +84,10 @@ class PengeluaranCard extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               '-${currencyFormat.format(pengeluaran.jumlah)}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                color: context.colors.textPrimary,
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
             ),
@@ -95,9 +95,9 @@ class PengeluaranCard extends StatelessWidget {
             InkWell(
               onTap: onDelete,
               borderRadius: BorderRadius.circular(8),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(4),
-                child: Icon(Icons.delete_outline, size: 18, color: AppColors.textMuted),
+                child: Icon(Icons.delete_outline, size: 18, color: context.colors.textMuted),
               ),
             ),
           ],

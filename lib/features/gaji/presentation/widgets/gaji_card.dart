@@ -27,9 +27,9 @@ class GajiCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: AppColors.divider),
+            bottom: BorderSide(color: context.colors.divider),
           ),
         ),
         child: Row(
@@ -37,17 +37,17 @@ class GajiCard extends StatelessWidget {
             Container(
               width: 40,
               height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.tint,
+              decoration: BoxDecoration(
+                color: context.colors.tint,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 'Rp',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
               ),
             ),
@@ -58,32 +58,32 @@ class GajiCard extends StatelessWidget {
                 children: [
                   Text(
                     'Gaji $monthName',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: context.colors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     'Diterima ${dateFormat.format(gaji.tanggal)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textSecondary,
+                      color: context.colors.textSecondary,
                     ),
                   ),
                   if (gaji.jumlahTersimpan > 0) ...[
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        const Icon(Icons.lock_outline,
-                            size: 11, color: AppColors.textMuted),
+                        Icon(Icons.lock_outline,
+                            size: 11, color: context.colors.textMuted),
                         const SizedBox(width: 3),
                         Text(
                           'Ditabung ${currencyFormat.format(gaji.jumlahTersimpan)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.textMuted,
+                            color: context.colors.textMuted,
                             fontFeatures: [FontFeature.tabularFigures()],
                           ),
                         ),
@@ -96,10 +96,10 @@ class GajiCard extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               '+${currencyFormat.format(gaji.jumlah)}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: AppColors.primary,
+                color: context.colors.primary,
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
             ),

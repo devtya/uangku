@@ -92,10 +92,10 @@ class _GajiFormDialogState extends State<GajiFormDialog> {
       alignment: Alignment.centerLeft,
       child: Text(
         'Otomatis tersimpan: ${rp.format(tersimpan)}',
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: AppColors.primary,
+          color: context.colors.primary,
         ),
       ),
     );

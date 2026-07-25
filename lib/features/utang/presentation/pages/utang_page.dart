@@ -114,7 +114,7 @@ class _UtangPageState extends State<UtangPage> {
         children: [
           Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 child: Row(
                   children: [
@@ -124,7 +124,7 @@ class _UtangPageState extends State<UtangPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.colors.textPrimary,
                         ),
                       ),
                     ),
@@ -187,7 +187,7 @@ class _UtangPageState extends State<UtangPage> {
           margin: const EdgeInsets.only(bottom: 18),
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: context.colors.primary,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Column(
@@ -210,22 +210,22 @@ class _UtangPageState extends State<UtangPage> {
             ],
           ),
         ),
-        const Text(
+        Text(
           'Daftar Utang',
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
+            color: context.colors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
         if (list.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 40),
             child: Center(
               child: Text(
                 'Belum ada utang',
-                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                style: TextStyle(fontSize: 13, color: context.colors.textSecondary),
               ),
             ),
           )

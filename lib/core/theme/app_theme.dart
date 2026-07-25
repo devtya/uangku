@@ -1,22 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Design tokens for uangku — white & blue palette.
-/// Source of truth: "uangku UI.dc.html" (oklch values converted to sRGB).
-class AppColors {
-  const AppColors._();
+/// Palet warna semantik uangku, sadar-tema (light & dark) lewat ThemeExtension.
+/// Akses di widget: `context.colors.primary`, dst.
+@immutable
+class AppPalette extends ThemeExtension<AppPalette> {
+  final Color primary;
+  final Color accent;
+  final Color tint;
+  final Color background;
+  final Color card;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color textMuted;
+  final Color border;
+  final Color divider;
+  final Color link;
 
-  static const primary = Color(0xFF012A63);
-  static const accent = Color(0xFF11458C);
-  static const tint = Color(0xFFE0EDFC);
-  static const background = Color(0xFFEFF4F8);
-  static const card = Color(0xFFFCFEFF);
-  static const textPrimary = Color(0xFF141B24);
-  static const textSecondary = Color(0xFF616A75);
-  static const textMuted = Color(0xFF9299A2);
-  static const border = Color(0xFFD8DFE6);
-  static const divider = Color(0xFFE3E8EE);
-  static const link = Color(0xFF427BC6);
+  const AppPalette({
+    required this.primary,
+    required this.accent,
+    required this.tint,
+    required this.background,
+    required this.card,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.textMuted,
+    required this.border,
+    required this.divider,
+    required this.link,
+  });
+
+  static const light = AppPalette(
+    primary: Color(0xFF012A63),
+    accent: Color(0xFF11458C),
+    tint: Color(0xFFE0EDFC),
+    background: Color(0xFFEFF4F8),
+    card: Color(0xFFFCFEFF),
+    textPrimary: Color(0xFF141B24),
+    textSecondary: Color(0xFF616A75),
+    textMuted: Color(0xFF9299A2),
+    border: Color(0xFFD8DFE6),
+    divider: Color(0xFFE3E8EE),
+    link: Color(0xFF427BC6),
+  );
+
+  static const dark = AppPalette(
+    primary: Color(0xFF4C8DF6),
+    accent: Color(0xFF3B6FB5),
+    tint: Color(0xFF16233A),
+    background: Color(0xFF0E1116),
+    card: Color(0xFF171C22),
+    textPrimary: Color(0xFFE7ECF2),
+    textSecondary: Color(0xFF9BA6B2),
+    textMuted: Color(0xFF6B7480),
+    border: Color(0xFF2A313A),
+    divider: Color(0xFF232A32),
+    link: Color(0xFF6FA3E0),
+  );
+
+  @override
+  AppPalette copyWith({
+    Color? primary,
+    Color? accent,
+    Color? tint,
+    Color? background,
+    Color? card,
+    Color? textPrimary,
+    Color? textSecondary,
+    Color? textMuted,
+    Color? border,
+    Color? divider,
+    Color? link,
+  }) {
+    return AppPalette(
+      primary: primary ?? this.primary,
+      accent: accent ?? this.accent,
+      tint: tint ?? this.tint,
+      background: background ?? this.background,
+      card: card ?? this.card,
+      textPrimary: textPrimary ?? this.textPrimary,
+      textSecondary: textSecondary ?? this.textSecondary,
+      textMuted: textMuted ?? this.textMuted,
+      border: border ?? this.border,
+      divider: divider ?? this.divider,
+      link: link ?? this.link,
+    );
+  }
+
+  @override
+  AppPalette lerp(ThemeExtension<AppPalette>? other, double t) {
+    if (other is! AppPalette) return this;
+    return AppPalette(
+      primary: Color.lerp(primary, other.primary, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
+      tint: Color.lerp(tint, other.tint, t)!,
+      background: Color.lerp(background, other.background, t)!,
+      card: Color.lerp(card, other.card, t)!,
+      textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
+      textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      divider: Color.lerp(divider, other.divider, t)!,
+      link: Color.lerp(link, other.link, t)!,
+    );
+  }
+}
+
+extension AppColorsX on BuildContext {
+  AppPalette get colors => Theme.of(this).extension<AppPalette>()!;
 }
 
 class AppSpacing {
@@ -32,84 +124,76 @@ class AppSpacing {
 class AppTheme {
   const AppTheme._();
 
-  static ThemeData get light {
+  static ThemeData get light => _build(AppPalette.light, Brightness.light);
+  static ThemeData get dark => _build(AppPalette.dark, Brightness.dark);
+
+  static ThemeData _build(AppPalette p, Brightness brightness) {
     final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.light,
+      seedColor: p.primary,
+      brightness: brightness,
     ).copyWith(
-      primary: AppColors.primary,
-      surface: AppColors.card,
-      onSurface: AppColors.textPrimary,
+      primary: p.primary,
+      surface: p.card,
+      onSurface: p.textPrimary,
     );
 
     return ThemeData(
       useMaterial3: true,
+      brightness: brightness,
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.background,
-      // Poppins diterapkan ke seluruh teks lewat textTheme; TextStyle eksplisit
-      // tanpa fontFamily mewarisi ini via merge dengan DefaultTextStyle.
+      scaffoldBackgroundColor: p.background,
+      extensions: [p],
+      // Poppins ke seluruh teks; TextStyle eksplisit mewarisi via merge.
       fontFamily: GoogleFonts.poppins().fontFamily,
       textTheme: GoogleFonts.poppinsTextTheme(
-        const TextTheme(
+        TextTheme(
           headlineSmall: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          titleLarge: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          titleMedium: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          bodyMedium: TextStyle(color: AppColors.textSecondary),
+              fontWeight: FontWeight.w700, color: p.textPrimary),
+          titleLarge:
+              TextStyle(fontWeight: FontWeight.w700, color: p.textPrimary),
+          titleMedium:
+              TextStyle(fontWeight: FontWeight.w700, color: p.textPrimary),
+          bodyMedium: TextStyle(color: p.textSecondary),
           titleSmall: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-          bodySmall: TextStyle(
-            fontSize: 12,
-            color: AppColors.textSecondary,
-          ),
+              fontSize: 14, fontWeight: FontWeight.w700, color: p.textPrimary),
+          bodySmall: TextStyle(fontSize: 12, color: p.textSecondary),
         ),
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+      appBarTheme: AppBarTheme(
+        backgroundColor: p.background,
+        foregroundColor: p.textPrimary,
         elevation: 0,
         centerTitle: false,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.card,
+        color: p.card,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: AppColors.divider),
+          side: BorderSide(color: p.divider),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.card,
+        fillColor: p.card,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: p.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: p.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: p.primary, width: 1.5),
         ),
-        labelStyle: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+        labelStyle: TextStyle(fontSize: 13, color: p.textSecondary),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: p.primary,
           foregroundColor: Colors.white,
           minimumSize: const Size(0, 54),
           shape: RoundedRectangleBorder(
@@ -120,29 +204,31 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.textSecondary,
+          foregroundColor: p.textSecondary,
           textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: p.primary,
         foregroundColor: Colors.white,
         elevation: 8,
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.card,
+        backgroundColor: p.card,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.card,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textMuted,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: p.card,
+        selectedItemColor: p.primary,
+        unselectedItemColor: p.textMuted,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
-        selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        selectedLabelStyle:
+            const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        unselectedLabelStyle:
+            const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
       ),
     );
   }
