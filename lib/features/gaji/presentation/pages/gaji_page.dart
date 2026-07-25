@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uangku/core/theme/app_theme.dart';
-import 'package:uangku/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:uangku/features/auth/presentation/bloc/auth_event.dart';
 import 'package:uangku/features/gaji/domain/entities/gaji_entity.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_bloc.dart';
 import 'package:uangku/features/gaji/presentation/bloc/gaji_event.dart';
@@ -84,11 +82,11 @@ class _GajiPageState extends State<GajiPage> {
         children: [
           Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Gaji',
                         style: TextStyle(
@@ -97,13 +95,6 @@ class _GajiPageState extends State<GajiPage> {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.logout_rounded, size: 18, color: AppColors.textMuted),
-                      tooltip: 'Keluar',
-                      onPressed: () {
-                        context.read<AuthBloc>().add(const AuthSignOutRequested());
-                      },
                     ),
                   ],
                 ),

@@ -30,6 +30,14 @@ import 'package:uangku/features/pengeluaran/domain/usecases/delete_pengeluaran.d
 import 'package:uangku/features/pengeluaran/domain/usecases/update_pengeluaran.dart';
 import 'package:uangku/features/pengeluaran/domain/usecases/watch_all_pengeluaran.dart';
 import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_bloc.dart';
+import 'package:uangku/features/utang/data/datasources/utang_local_datasource.dart';
+import 'package:uangku/features/utang/data/repositories/utang_repository_impl.dart';
+import 'package:uangku/features/utang/domain/repositories/utang_repository.dart';
+import 'package:uangku/features/utang/domain/usecases/add_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/delete_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/update_utang.dart';
+import 'package:uangku/features/utang/domain/usecases/watch_all_utang.dart';
+import 'package:uangku/features/utang/presentation/bloc/utang_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -104,6 +112,26 @@ Future<void> initDependencies() async {
       addPengeluaran: sl(),
       updatePengeluaran: sl(),
       deletePengeluaran: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(() => UtangLocalDataSource(sl()));
+
+  sl.registerLazySingleton<UtangRepository>(
+    () => UtangRepositoryImpl(sl()),
+  );
+
+  sl.registerLazySingleton(() => WatchAllUtang(sl()));
+  sl.registerLazySingleton(() => AddUtang(sl()));
+  sl.registerLazySingleton(() => UpdateUtang(sl()));
+  sl.registerLazySingleton(() => DeleteUtang(sl()));
+
+  sl.registerFactory(
+    () => UtangBloc(
+      watchAllUtang: sl(),
+      addUtang: sl(),
+      updateUtang: sl(),
+      deleteUtang: sl(),
     ),
   );
 
