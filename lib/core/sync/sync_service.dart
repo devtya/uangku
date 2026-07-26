@@ -29,6 +29,7 @@ class SyncService {
   bool _busy = false;
   StreamSubscription<void>? _tableSub;
   StreamSubscription<List<ConnectivityResult>>? _connSub;
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _avatarSub;
   Timer? _pushDebounce;
 
   Future<void> handleLogin(String uid) async {
@@ -46,6 +47,11 @@ class SyncService {
       final online = results.any((r) => r != ConnectivityResult.none);
       if (online) _fullSync();
     });
+    // Avatar disinkronkan realtime (server = sumber kebenaran), bukan LWW
+    // berbasis jam client yang rawan skew antar-device.
+    _avatarSub ??= _avatarDoc(uid)
+        .snapshots()
+        .listen(_applyAvatarSnapshot, onError: (_) {});
 
     await _fullSync();
   }
@@ -56,6 +62,8 @@ class SyncService {
     _tableSub = null;
     _connSub?.cancel();
     _connSub = null;
+    _avatarSub?.cancel();
+    _avatarSub = null;
     _pushDebounce?.cancel();
     // Data lokal sengaja TIDAK dihapus (sesuai kebijakan offline-first).
   }
@@ -150,16 +158,14 @@ class SyncService {
     await _pushAvatar(uid);
   }
 
-  /// Kirim pilihan avatar ke doc `users/{uid}`. Foto galeri dikirim base64
-  /// (dibatasi 512px q85 di picker, aman di bawah limit 1MB/doc Firestore).
+  /// Kirim pilihan avatar lokal (avatarSynced=0) ke doc avatar. Foto galeri
+  /// dikirim base64 (512px q85, aman di bawah limit 1MB/doc Firestore).
   Future<void> _pushAvatar(String uid) async {
     if (await _getMeta('avatarSynced') == '1') return;
     final value = await _getMeta('avatar');
     if (value == null) return;
-    final ts = int.tryParse(await _getMeta('avatarUpdatedAt') ?? '') ??
-        DateTime.now().millisecondsSinceEpoch;
 
-    final data = <String, dynamic>{'avatarUpdatedAt': ts};
+    final data = <String, dynamic>{};
     if (value.startsWith('file:')) {
       final dir = await getApplicationDocumentsDirectory();
       final f = File(p.join(dir.path, value.substring(5)));
@@ -172,6 +178,44 @@ class SyncService {
     }
     await _avatarDoc(uid).set(data, SetOptions(merge: true));
     await _setMeta('avatarSynced', '1');
+  }
+
+  /// Terapkan avatar dari cloud ke lokal (dipicu realtime). Server menang,
+  /// KECUALI ada pilihan lokal yang belum ter-push (avatarSynced=0) — itu
+  /// dibiarkan menang lalu di-push oleh _pushAvatar.
+  Future<void> _applyAvatarSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snap) async {
+    if (await _getMeta('avatarSynced') == '0') return; // pilihan lokal pending
+    final d = snap.data();
+    final remoteAvatar = d?['avatar'] as String?;
+    if (remoteAvatar == null) return;
+
+    String value;
+    if (remoteAvatar == 'photo') {
+      final b64 = d!['avatarPhoto'] as String?;
+      if (b64 == null) return;
+      await _deleteLocalAvatarFile();
+      final dir = await getApplicationDocumentsDirectory();
+      final name = 'avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      await File(p.join(dir.path, name)).writeAsBytes(base64Decode(b64));
+      value = 'file:$name';
+    } else {
+      if (await _getMeta('avatar') == remoteAvatar) return; // tak berubah
+      await _deleteLocalAvatarFile();
+      value = remoteAvatar; // 'google' / 'preset:..'
+    }
+    await _setMeta('avatar', value);
+    await _setMeta('avatarSynced', '1'); // hindari echo-push
+  }
+
+  Future<void> _deleteLocalAvatarFile() async {
+    final current = await _getMeta('avatar');
+    if (current == null || !current.startsWith('file:')) return;
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final f = File(p.join(dir.path, current.substring(5)));
+      if (await f.exists()) await f.delete();
+    } catch (_) {}
   }
 
   /// Doc avatar di subcollection (tercakup rule `users/{uid}/{document=**}`
@@ -206,51 +250,6 @@ class SyncService {
     await _pullCollection(uid, 'utang', _upsertUtang);
     await _pullCollection(uid, 'kategori', _upsertKategori);
     await _pullCollection(uid, 'recurring', _upsertRecurring);
-    await _pullAvatar(uid);
-  }
-
-  Future<void> _pullAvatar(String uid) async {
-    final snap = await _avatarDoc(uid).get();
-    final d = snap.data();
-    final remoteAvatar = d?['avatar'] as String?;
-    if (d == null || remoteAvatar == null) return;
-    final remoteTs = (d['avatarUpdatedAt'] as num?)?.toInt();
-    if (remoteTs == null) return;
-
-    final localTs = int.tryParse(await _getMeta('avatarUpdatedAt') ?? '');
-    final localDt =
-        localTs == null ? null : DateTime.fromMillisecondsSinceEpoch(localTs);
-    if (!shouldApplyRemote(localDt, DateTime.fromMillisecondsSinceEpoch(remoteTs))) {
-      return;
-    }
-
-    String value;
-    if (remoteAvatar == 'photo') {
-      final b64 = d['avatarPhoto'] as String?;
-      if (b64 == null) return;
-      await _deleteLocalAvatarFile();
-      final dir = await getApplicationDocumentsDirectory();
-      final name = 'avatar_$remoteTs.jpg';
-      await File(p.join(dir.path, name)).writeAsBytes(base64Decode(b64));
-      value = 'file:$name';
-    } else {
-      await _deleteLocalAvatarFile();
-      value = remoteAvatar; // 'google' / 'preset:..'
-    }
-
-    await _setMeta('avatar', value);
-    await _setMeta('avatarUpdatedAt', remoteTs.toString());
-    await _setMeta('avatarSynced', '1'); // hindari echo-push
-  }
-
-  Future<void> _deleteLocalAvatarFile() async {
-    final current = await _getMeta('avatar');
-    if (current == null || !current.startsWith('file:')) return;
-    try {
-      final dir = await getApplicationDocumentsDirectory();
-      final f = File(p.join(dir.path, current.substring(5)));
-      if (await f.exists()) await f.delete();
-    } catch (_) {}
   }
 
   Future<void> _pullCollection(

@@ -62,12 +62,11 @@ class AvatarCubit extends Cubit<String?> {
 
   Future<void> _save(String value) async {
     if (!value.startsWith('file:')) await _deleteOldFile();
-    final now = DateTime.now().millisecondsSinceEpoch.toString();
+    // avatarSynced=0 → menandai pilihan lokal yang belum ter-push; SyncService
+    // akan mengirimnya dan membiarkannya menang atas snapshot cloud sementara.
     await _db.batch((b) {
       b.insertAllOnConflictUpdate(_db.syncMetaTable, [
         SyncMetaTableCompanion(key: const Value(keyAvatar), value: Value(value)),
-        SyncMetaTableCompanion(
-            key: const Value('avatarUpdatedAt'), value: Value(now)),
         SyncMetaTableCompanion(
             key: const Value('avatarSynced'), value: const Value('0')),
       ]);
