@@ -254,10 +254,12 @@ class _ProfileTile extends StatelessWidget {
 
   void _showAvatarPicker(BuildContext context) {
     final cubit = context.read<AvatarCubit>();
+    final current = cubit.state; // null=Google, 'file:..', 'preset:..'
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
       builder: (sheetCtx) {
+        final colors = sheetCtx.colors;
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -266,11 +268,17 @@ class _ProfileTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
                 child: Text('Ganti avatar',
-                    style: Theme.of(sheetCtx).textTheme.titleMedium),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: colors.textPrimary)),
               ),
               ListTile(
                 leading: const Icon(Icons.account_circle_outlined),
                 title: const Text('Foto Google'),
+                trailing: (current == null || current == 'google')
+                    ? Icon(Icons.check_rounded, color: colors.primary)
+                    : null,
                 onTap: () {
                   cubit.useGoogle();
                   Navigator.of(sheetCtx).pop();
@@ -279,6 +287,9 @@ class _ProfileTile extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
                 title: const Text('Pilih dari galeri'),
+                trailing: current != null && current.startsWith('file:')
+                    ? Icon(Icons.check_rounded, color: colors.primary)
+                    : null,
                 onTap: () async {
                   final messenger = ScaffoldMessenger.of(context);
                   Navigator.of(sheetCtx).pop();
@@ -296,9 +307,10 @@ class _ProfileTile extends StatelessWidget {
                   }
                 },
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 12, 20, 4),
-                child: Text('Avatar bawaan'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+                child: Text('Avatar bawaan',
+                    style: TextStyle(fontSize: 13, color: colors.textSecondary)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -313,11 +325,18 @@ class _ProfileTile extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8),
-                          child: CircleAvatar(
-                            radius: 24,
-                            backgroundColor:
-                                Theme.of(sheetCtx).colorScheme.surfaceContainerHighest,
-                            child: Text(e, style: const TextStyle(fontSize: 26)),
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: colors.tint,
+                              shape: BoxShape.circle,
+                              border: current == 'preset:$e'
+                                  ? Border.all(color: colors.primary, width: 2)
+                                  : null,
+                            ),
+                            child: Text(e, style: const TextStyle(fontSize: 24)),
                           ),
                         ),
                       ),

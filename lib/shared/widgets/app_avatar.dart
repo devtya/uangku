@@ -26,6 +26,7 @@ class AppAvatar extends StatelessWidget {
             : user?.email.split('@').first) ??
         '';
     final initial = nama.isNotEmpty ? nama[0].toUpperCase() : '?';
+    Widget fallback() => _initialCircle(context, initial);
 
     if (avatar != null && avatar.startsWith('preset:')) {
       return _circle(context,
@@ -37,27 +38,33 @@ class AppAvatar extends StatelessWidget {
       final dir = appDocumentsPath;
       if (dir != null) {
         final file = File(p.join(dir, avatar.substring(5)));
-        if (file.existsSync()) return _image(FileImage(file));
+        if (file.existsSync()) {
+          return _clip(Image.file(file,
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => fallback()));
+        }
       }
+      return fallback();
     }
 
     final photoUrl = user?.photoUrl;
     if (photoUrl != null && photoUrl.isNotEmpty) {
-      return _image(NetworkImage(photoUrl));
+      return _clip(Image.network(photoUrl,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => fallback(),
+          loadingBuilder: (_, child, progress) =>
+              progress == null ? child : fallback()));
     }
 
-    return _circle(context,
-        child: Text(initial,
-            style: TextStyle(
-                fontSize: size * 0.35,
-                fontWeight: FontWeight.w700,
-                color: context.colors.primary)));
+    return fallback();
   }
 
-  Widget _image(ImageProvider provider) => CircleAvatar(
-        radius: size / 2,
-        backgroundImage: provider,
-      );
+  Widget _clip(Widget child) =>
+      ClipOval(child: SizedBox(width: size, height: size, child: child));
 
   Widget _circle(BuildContext context, {required Widget child}) => Container(
         width: size,
@@ -67,4 +74,11 @@ class AppAvatar extends StatelessWidget {
         alignment: Alignment.center,
         child: child,
       );
+
+  Widget _initialCircle(BuildContext context, String initial) => _circle(context,
+      child: Text(initial,
+          style: TextStyle(
+              fontSize: size * 0.4,
+              fontWeight: FontWeight.w700,
+              color: context.colors.primary)));
 }
