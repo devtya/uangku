@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -11,27 +12,40 @@ import 'package:uangku/core/database/app_database.dart';
 /// membangun File secara sinkron (tanpa FutureBuilder yang berkedip).
 String? appDocumentsPath;
 
-/// Pilihan avatar user, disimpan lokal di tabel sync_meta.
+/// Pilihan avatar user, disimpan lokal di tabel sync_meta dan disinkronkan
+/// lintas device lewat SyncService.
 ///
-/// Nilai yang mungkin:
-/// - null/'google' → default: foto Google, fallback inisial
+/// Nilai `avatar`:
+/// - 'google' → foto Google, fallback inisial
 /// - 'preset:<emoji>' → avatar emoji bawaan
-/// - 'file:<namafile>' → foto galeri yang disalin ke folder dokumen app
+/// - 'file:<namafile>' → foto galeri (file di folder dokumen app)
+///
+/// Meta pendamping (untuk sync last-write-wins):
+/// - 'avatarUpdatedAt' → ms epoch perubahan terakhir
+/// - 'avatarSynced' → '1' bila sudah terkirim ke cloud, '0' bila belum
 class AvatarCubit extends Cubit<String?> {
   final AppDatabase _db;
-  static const _key = 'avatar';
+  static const keyAvatar = 'avatar';
+  StreamSubscription<SyncMetaTableData?>? _sub;
 
-  AvatarCubit(this._db) : super(null);
+  AvatarCubit(this._db) : super(null) {
+    // Reaktif: tiap perubahan baris 'avatar' (lokal maupun hasil pull sync)
+    // langsung tercermin di UI.
+    _sub = (_db.select(_db.syncMetaTable)..where((t) => t.key.equals(keyAvatar)))
+        .watchSingleOrNull()
+        .listen((row) => emit(row?.value));
+  }
 
+  /// Muat nilai awal secara sinkron sebelum UI dibangun.
   Future<void> load() async {
     final row = await (_db.select(_db.syncMetaTable)
-          ..where((t) => t.key.equals(_key))
+          ..where((t) => t.key.equals(keyAvatar))
           ..limit(1))
         .getSingleOrNull();
     emit(row?.value);
   }
 
-  Future<void> useGoogle() => _save(null);
+  Future<void> useGoogle() => _save('google');
 
   Future<void> usePreset(String emoji) => _save('preset:$emoji');
 
@@ -46,22 +60,18 @@ class AvatarCubit extends Cubit<String?> {
     await _save('file:$name');
   }
 
-  Future<void> _save(String? value) async {
-    await _deleteOldFileIf(value);
-    if (value == null) {
-      await (_db.delete(_db.syncMetaTable)..where((t) => t.key.equals(_key)))
-          .go();
-    } else {
-      await _db.into(_db.syncMetaTable).insertOnConflictUpdate(
-          SyncMetaTableCompanion(key: Value(_key), value: Value(value)));
-    }
-    emit(value);
-  }
-
-  /// Hapus file lama bila pindah ke pilihan non-file.
-  Future<void> _deleteOldFileIf(String? next) async {
-    if (next != null && next.startsWith('file:')) return;
-    await _deleteOldFile();
+  Future<void> _save(String value) async {
+    if (!value.startsWith('file:')) await _deleteOldFile();
+    final now = DateTime.now().millisecondsSinceEpoch.toString();
+    await _db.batch((b) {
+      b.insertAllOnConflictUpdate(_db.syncMetaTable, [
+        SyncMetaTableCompanion(key: const Value(keyAvatar), value: Value(value)),
+        SyncMetaTableCompanion(
+            key: const Value('avatarUpdatedAt'), value: Value(now)),
+        SyncMetaTableCompanion(
+            key: const Value('avatarSynced'), value: const Value('0')),
+      ]);
+    });
   }
 
   Future<void> _deleteOldFile() async {
@@ -74,5 +84,11 @@ class AvatarCubit extends Cubit<String?> {
     } catch (e) {
       debugPrint('Gagal hapus avatar lama: $e');
     }
+  }
+
+  @override
+  Future<void> close() {
+    _sub?.cancel();
+    return super.close();
   }
 }

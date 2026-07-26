@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:drift/drift.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:uangku/core/database/app_database.dart';
 
 /// Last-write-wins: terapkan data remote hanya jika lebih baru dari lokal.
@@ -143,7 +147,37 @@ class SyncService {
       (ids) => (_db.update(_db.recurringTable)..where((t) => t.id.isIn(ids)))
           .write(const RecurringTableCompanion(isSynced: Value(true))),
     );
+    await _pushAvatar(uid);
   }
+
+  /// Kirim pilihan avatar ke doc `users/{uid}`. Foto galeri dikirim base64
+  /// (dibatasi 512px q85 di picker, aman di bawah limit 1MB/doc Firestore).
+  Future<void> _pushAvatar(String uid) async {
+    if (await _getMeta('avatarSynced') == '1') return;
+    final value = await _getMeta('avatar');
+    if (value == null) return;
+    final ts = int.tryParse(await _getMeta('avatarUpdatedAt') ?? '') ??
+        DateTime.now().millisecondsSinceEpoch;
+
+    final data = <String, dynamic>{'avatarUpdatedAt': ts};
+    if (value.startsWith('file:')) {
+      final dir = await getApplicationDocumentsDirectory();
+      final f = File(p.join(dir.path, value.substring(5)));
+      if (!await f.exists()) return; // file hilang, jangan tandai synced
+      data['avatar'] = 'photo';
+      data['avatarPhoto'] = base64Encode(await f.readAsBytes());
+    } else {
+      data['avatar'] = value; // 'google' / 'preset:..'
+      data['avatarPhoto'] = FieldValue.delete();
+    }
+    await _avatarDoc(uid).set(data, SetOptions(merge: true));
+    await _setMeta('avatarSynced', '1');
+  }
+
+  /// Doc avatar di subcollection (tercakup rule `users/{uid}/{document=**}`
+  /// yang sama dengan data lain — tak perlu ubah Firestore rules).
+  DocumentReference<Map<String, dynamic>> _avatarDoc(String uid) =>
+      _firestore.collection('users').doc(uid).collection('meta').doc('profile');
 
   Future<void> _pushCollection<D>(
     String uid,
@@ -172,6 +206,51 @@ class SyncService {
     await _pullCollection(uid, 'utang', _upsertUtang);
     await _pullCollection(uid, 'kategori', _upsertKategori);
     await _pullCollection(uid, 'recurring', _upsertRecurring);
+    await _pullAvatar(uid);
+  }
+
+  Future<void> _pullAvatar(String uid) async {
+    final snap = await _avatarDoc(uid).get();
+    final d = snap.data();
+    final remoteAvatar = d?['avatar'] as String?;
+    if (d == null || remoteAvatar == null) return;
+    final remoteTs = (d['avatarUpdatedAt'] as num?)?.toInt();
+    if (remoteTs == null) return;
+
+    final localTs = int.tryParse(await _getMeta('avatarUpdatedAt') ?? '');
+    final localDt =
+        localTs == null ? null : DateTime.fromMillisecondsSinceEpoch(localTs);
+    if (!shouldApplyRemote(localDt, DateTime.fromMillisecondsSinceEpoch(remoteTs))) {
+      return;
+    }
+
+    String value;
+    if (remoteAvatar == 'photo') {
+      final b64 = d['avatarPhoto'] as String?;
+      if (b64 == null) return;
+      await _deleteLocalAvatarFile();
+      final dir = await getApplicationDocumentsDirectory();
+      final name = 'avatar_$remoteTs.jpg';
+      await File(p.join(dir.path, name)).writeAsBytes(base64Decode(b64));
+      value = 'file:$name';
+    } else {
+      await _deleteLocalAvatarFile();
+      value = remoteAvatar; // 'google' / 'preset:..'
+    }
+
+    await _setMeta('avatar', value);
+    await _setMeta('avatarUpdatedAt', remoteTs.toString());
+    await _setMeta('avatarSynced', '1'); // hindari echo-push
+  }
+
+  Future<void> _deleteLocalAvatarFile() async {
+    final current = await _getMeta('avatar');
+    if (current == null || !current.startsWith('file:')) return;
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final f = File(p.join(dir.path, current.substring(5)));
+      if (await f.exists()) await f.delete();
+    } catch (_) {}
   }
 
   Future<void> _pullCollection(
@@ -396,5 +475,11 @@ class SyncService {
     await _db.delete(_db.pengeluaranTable).go();
     await _db.delete(_db.utangTable).go();
     await _db.delete(_db.kategoriTable).go();
+    // Avatar milik akun lama: hapus file + meta agar tak nyangkut ke akun baru.
+    await _deleteLocalAvatarFile();
+    await (_db.delete(_db.syncMetaTable)
+          ..where((t) => t.key.isIn(
+              const ['avatar', 'avatarUpdatedAt', 'avatarSynced'])))
+        .go();
   }
 }
