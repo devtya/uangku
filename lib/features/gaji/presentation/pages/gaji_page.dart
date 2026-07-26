@@ -9,6 +9,8 @@ import 'package:uangku/features/gaji/presentation/bloc/gaji_state.dart';
 import 'package:uangku/features/gaji/presentation/widgets/gaji_card.dart';
 import 'package:uangku/features/gaji/presentation/widgets/gaji_detail_dialog.dart';
 import 'package:uangku/features/gaji/presentation/widgets/gaji_form_dialog.dart';
+import 'package:uangku/shared/utils/month_group.dart';
+import 'package:uangku/shared/widgets/month_selector.dart';
 
 class GajiPage extends StatefulWidget {
   const GajiPage({super.key});
@@ -18,9 +20,13 @@ class GajiPage extends StatefulWidget {
 }
 
 class _GajiPageState extends State<GajiPage> {
+  late DateTime _selectedMonth;
+
   @override
   void initState() {
     super.initState();
+    final now = DateTime.now();
+    _selectedMonth = DateTime(now.year, now.month);
     context.read<GajiBloc>().add(const GajiWatchRequested());
   }
 
@@ -138,93 +144,36 @@ class _GajiPageState extends State<GajiPage> {
                       }
                       if (state is GajiLoaded) {
                         final list = state.gajiList;
+                        final groups = groupByMonth<GajiEntity>(
+                            list, (g) => g.tanggal, (g) => g.jumlah);
+                        final totalTerpilih = groups
+                            .where((g) => g.month == _selectedMonth)
+                            .fold<double>(0, (s, g) => s + g.total);
+
                         final now = DateTime.now();
-                        final tahunIni = list
-                            .where((g) => g.tanggal.year == now.year)
-                            .fold<double>(0, (sum, g) => sum + g.jumlah);
-                        final bulanAktif = list
-                            .where((g) => g.tanggal.year == now.year)
-                            .map((g) => g.tanggal.month)
-                            .toSet()
-                            .length;
-                        final rataRata =
-                            bulanAktif > 0 ? tahunIni / bulanAktif : 0.0;
+                        final thisMonth = DateTime(now.year, now.month);
+                        final canNext = _selectedMonth.isBefore(thisMonth);
+                        final earliest =
+                            groups.isNotEmpty ? groups.last.month : thisMonth;
+                        final canPrev = _selectedMonth.isAfter(earliest);
 
                         return ListView(
                           padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 18),
-                              padding: const EdgeInsets.all(18),
-                              decoration: BoxDecoration(
-                                color: context.colors.primary,
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Total Tahun Ini',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.white70,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          rp.format(tahunIni),
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                            fontFeatures: [FontFeature.tabularFigures()],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        const Text(
-                                          'Rata-rata/Bulan',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.white70,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          rp.format(rataRata),
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                            fontFeatures: [FontFeature.tabularFigures()],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            MonthSelectorCard(
+                              month: _selectedMonth,
+                              label: 'Pendapatan',
+                              total: rp.format(totalTerpilih),
+                              canPrev: canPrev,
+                              canNext: canNext,
+                              onChange: (delta) => setState(() =>
+                                  _selectedMonth = DateTime(_selectedMonth.year,
+                                      _selectedMonth.month + delta)),
                             ),
-                            Text(
-                              'Riwayat',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: context.colors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            if (list.isEmpty)
+                            const SizedBox(height: 18),
+                            if (groups.isEmpty)
                               Padding(
-                                padding: EdgeInsets.only(top: 40),
+                                padding: const EdgeInsets.only(top: 40),
                                 child: Center(
                                   child: Text(
                                     'Belum ada data pendapatan',
@@ -236,12 +185,21 @@ class _GajiPageState extends State<GajiPage> {
                                 ),
                               )
                             else
-                              ...list.map(
-                                (gaji) => GajiCard(
-                                  gaji: gaji,
-                                  onTap: () => _showDetail(gaji),
+                              for (final grp in groups) ...[
+                                MonthHeader(
+                                  month: grp.month,
+                                  total: rp.format(grp.total),
+                                  selected: grp.month == _selectedMonth,
+                                  onTap: () => setState(
+                                      () => _selectedMonth = grp.month),
                                 ),
-                              ),
+                                ...grp.items.map(
+                                  (gaji) => GajiCard(
+                                    gaji: gaji,
+                                    onTap: () => _showDetail(gaji),
+                                  ),
+                                ),
+                              ],
                           ],
                         );
                       }

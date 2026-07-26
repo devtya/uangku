@@ -12,6 +12,8 @@ import 'package:uangku/features/pengeluaran/presentation/bloc/pengeluaran_state.
 import 'package:uangku/features/pengeluaran/presentation/widgets/kelola_kategori_sheet.dart';
 import 'package:uangku/features/pengeluaran/presentation/widgets/pengeluaran_card.dart';
 import 'package:uangku/features/pengeluaran/presentation/widgets/pengeluaran_form_dialog.dart';
+import 'package:uangku/shared/utils/month_group.dart';
+import 'package:uangku/shared/widgets/month_selector.dart';
 
 class PengeluaranPage extends StatefulWidget {
   const PengeluaranPage({super.key});
@@ -21,9 +23,13 @@ class PengeluaranPage extends StatefulWidget {
 }
 
 class _PengeluaranPageState extends State<PengeluaranPage> {
+  late DateTime _selectedMonth;
+
   @override
   void initState() {
     super.initState();
+    final now = DateTime.now();
+    _selectedMonth = DateTime(now.year, now.month);
     context.read<PengeluaranBloc>().add(const PengeluaranWatchRequested());
   }
 
@@ -170,53 +176,33 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
     Map<String, String> namaById,
     NumberFormat rp,
   ) {
-    final now = DateTime.now();
-    final totalBulanIni = list
-        .where((p) => p.tanggal.year == now.year && p.tanggal.month == now.month)
-        .fold<double>(0, (sum, p) => sum + p.jumlah);
+    final groups = groupByMonth<PengeluaranEntity>(
+        list, (p) => p.tanggal, (p) => p.jumlah);
+    final totalTerpilih = groups
+        .where((g) => g.month == _selectedMonth)
+        .fold<double>(0, (s, g) => s + g.total);
+
+    final thisMonth = DateTime(DateTime.now().year, DateTime.now().month);
+    final canNext = _selectedMonth.isBefore(thisMonth);
+    final earliest = groups.isNotEmpty ? groups.last.month : thisMonth;
+    final canPrev = _selectedMonth.isAfter(earliest);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
       children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 18),
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            color: context.colors.primary,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Pengeluaran ${DateFormat('MMMM yyyy', 'id_ID').format(now)}',
-                style: const TextStyle(fontSize: 11, color: Colors.white70),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                rp.format(totalBulanIni),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontFeatures: [FontFeature.tabularFigures()],
-                ),
-              ),
-            ],
-          ),
+        MonthSelectorCard(
+          month: _selectedMonth,
+          label: 'Pengeluaran',
+          total: rp.format(totalTerpilih),
+          canPrev: canPrev,
+          canNext: canNext,
+          onChange: (delta) => setState(() => _selectedMonth = DateTime(
+              _selectedMonth.year, _selectedMonth.month + delta)),
         ),
-        Text(
-          'Riwayat',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: context.colors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        if (list.isEmpty)
+        const SizedBox(height: 18),
+        if (groups.isEmpty)
           Padding(
-            padding: EdgeInsets.only(top: 40),
+            padding: const EdgeInsets.only(top: 40),
             child: Center(
               child: Text(
                 'Belum ada pengeluaran',
@@ -225,21 +211,29 @@ class _PengeluaranPageState extends State<PengeluaranPage> {
             ),
           )
         else
-          ...list.map(
-            (p) => PengeluaranCard(
-              pengeluaran: p,
-              kategoriNama: namaById[p.kategoriId] ?? 'Tanpa kategori',
-              onTap: () => _showEditDialog(p),
-              onDelete: () async {
-                final confirmed = await _confirmDelete();
-                if (confirmed && mounted) {
-                  context
-                      .read<PengeluaranBloc>()
-                      .add(PengeluaranDeleteRequested(p.id));
-                }
-              },
+          for (final g in groups) ...[
+            MonthHeader(
+              month: g.month,
+              total: rp.format(g.total),
+              selected: g.month == _selectedMonth,
+              onTap: () => setState(() => _selectedMonth = g.month),
             ),
-          ),
+            ...g.items.map(
+              (p) => PengeluaranCard(
+                pengeluaran: p,
+                kategoriNama: namaById[p.kategoriId] ?? 'Tanpa kategori',
+                onTap: () => _showEditDialog(p),
+                onDelete: () async {
+                  final confirmed = await _confirmDelete();
+                  if (confirmed && mounted) {
+                    context
+                        .read<PengeluaranBloc>()
+                        .add(PengeluaranDeleteRequested(p.id));
+                  }
+                },
+              ),
+            ),
+          ],
       ],
     );
   }
